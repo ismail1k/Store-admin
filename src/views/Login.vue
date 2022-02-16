@@ -1,0 +1,94 @@
+<template>
+    <div v-if="!$store.state.user.auth" class="d-flex justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-5">
+            <div class="form-group my-5">
+                <div class="d-flex justify-content-center">
+                    <div class="footer_logo"><a>{{$hostname}}</a></div>
+                </div>
+            </div>
+            <div class="form-group" v-if="alert">
+                <div class="alert alert-danger">
+                    <span>{{alert}}</span>
+                </div>
+            </div>
+            <Spinner v-if="loading"></Spinner>
+            <div v-else>
+                <div class="form-group row align-items-center mb-3">
+                    <div class="d-flex justify-content-start">
+                        <label for="email">Email: </label>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control" v-model="email" id="email" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group row align-items-center mb-3">
+                    <div class="d-flex justify-content-start">
+                        <label for="password">Password: </label>
+                    </div>
+                    <div>
+                        <input type="password" class="form-control" v-model="password" id="password" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-ligth border-2 border-dark px-5 rounded-0" @click="login()"><span>Login</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import axios from 'axios'
+import Spinner from '@/components/Spinner.vue'
+
+export default {
+    data(){
+        return {
+            loading: false,
+            email: '',
+            password: '',
+            alert: false,
+        }
+    },
+    name: 'Login',
+    components: {
+        Spinner,
+    },
+    methods: {
+        login: function(){
+            let self = this
+            this.alert = false
+            this.loading = true
+            axios.post(this.$api+'/auth/login',{
+                email: self.email,
+                password: self.password
+            })
+            .then(function(response){
+                if(response.data.auth == true){
+                    if(response.data.admin == true){
+                        localStorage.setItem('token', response.data.token)
+                        self.$router.back()
+                    }else{
+                        self.alert = 'You are not allowed to access admin panel.'
+                    }
+                } else {
+                    self.alert = response.data.message
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+            })
+        },
+    },
+    created(){
+        if(this.$store.state.user.auth){
+            this.$router.back()
+        }
+    },
+}
+</script>
