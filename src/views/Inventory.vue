@@ -20,7 +20,7 @@
                     <td><span v-text="inventory.name"></span></td>
                     <td><span v-text="inventory.quantity"></span></td>
                     <td>
-                        <a href="javascript:void(0)" @click="view(inventory.id)"><i class="fa-solid fa-eye"></i></a>
+                        <router-link to="/inventory/1/edit"><i class="fa-solid fa-pen-to-square"></i></router-link>
                     </td>
                 </tr>
             </table>

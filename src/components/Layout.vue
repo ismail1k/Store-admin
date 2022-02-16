@@ -16,7 +16,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav" v-if="menu.length">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <router-link v-for="m in menu" :key="m" class="nav-link" :to="m.url">
+                            <router-link v-for="m in menu" :key="m" class="nav-link" :to="'/'+m.url">
                                 <div class="sb-nav-link-icon"><i :class="'fas fa-'+m.icon"></i></div>
                                 {{m.name}}
                             </router-link>
