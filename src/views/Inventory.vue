@@ -20,92 +20,23 @@
                     <td><span v-text="inventory.name"></span></td>
                     <td><span v-text="inventory.quantity"></span></td>
                     <td>
-                        <router-link to="/inventory/1/edit"><i class="fa-solid fa-pen-to-square"></i></router-link>
+                        <router-link :to="'/inventory/'+inventory.id+'/edit'"><i class="fa-solid fa-pen-to-square"></i></router-link>
                     </td>
                 </tr>
             </table>
         </div>
-        <div id="open_inventory" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">View Inventory</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="open_inventory == false"></button>
-                    </div>
-                    <div class="modal-body">
-                        <Spinner class="my-5" v-if="!open_inventory"></Spinner>
-                        <div v-if="open_inventory">
-                            <div class="d-flex align-items-center justify-content-center">
-                                <div class="col-3">Inventory Name:</div>
-                                <div class="col-9"><input type="text" class="form-control" v-model="open_inventory.name"></div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-center my-3">
-                                <div class="col-3">Quantity:</div>
-                                <div class="col-9">8 items</div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <table class="table table-striped table-bordered mx-2">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Value</th>
-                                        <th width="100px">Availability</th>
-                                        <th width="100px">Action</th>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>
-                                            <span>Physical/Digital</span>
-                                        </td>
-                                        <td align="center">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                            </div>
-                                        </td>
-                                        <td align="center">
-                                            <span><a href="javascript:void(0)" class="text-danger"><i class="fa-solid fa-xmark"></i></a></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;-</td>
-                                        <td>
-                                            <input type="text" placeholder="if product is digital, leave it empty." class="form-control form-control-sm">
-                                        </td>
-                                        <td align="center">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                            </div>
-                                        </td>
-                                        <td align="center">
-                                            <a href="javascript:void(0)" class="text-success"><i class="fa-solid fa-check"></i></a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger mr-auto" @click="remove()">Remove</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="open_inventory == false">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 <script>
-import $ from 'jquery'
 import axios from 'axios'
 import Spinner from '@/components/Spinner.vue'
 import { useToast } from "vue-toastification"
-import { Modal } from 'bootstrap'
 export default {
     data(){
         return {
             loading: false,
             inventories: false,
             inventory_name: '',
-            open_inventory: false,
         }
     },
     name: 'Inventory',
@@ -153,27 +84,6 @@ export default {
             })
             .finally(function(){
                 self.load()
-            })
-        },
-        view: function(inventory_id){
-            this.open_inventory = false
-            let toast = useToast()
-            let self = this
-            let m = new Modal($('#open_inventory'))
-            m.show()
-            axios.get(this.$api+'/inventory/view', {
-                params: {
-                    token: localStorage.getItem('token'),
-                    inventory_id: inventory_id,
-                },
-            })
-            .then(function(response){
-                console.log(response.data)
-                self.open_inventory = response.data
-            })
-            .catch(function(error){
-                toast.error('Error!')
-                console.log(error)
             })
         },
         remove: function(id){

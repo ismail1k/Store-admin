@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '@/views/Dashboard.vue'
 import Category from '@/views/Category.vue'
 import Inventory from '@/views/Inventory.vue'
-import Inventory_Edit from '@/views/Inventory.vue'
+import Inventory_Edit from '@/views/Inventory_Edit.vue'
 
 //Other Path
 import C404 from '@/views/C404.vue'
@@ -38,15 +38,14 @@ const routes = [
         path: '/inventory',
         name: 'Inventory',
         component: Inventory,
-        children: [
-            {
-                path: ':id/edit',
-                component: Inventory_Edit,
-                meta: {
-                    layout: true,
-                },
-            },
-        ],
+        meta: {
+            layout: true,
+        },
+    },
+    {
+        path: '/inventory/:inventory_id/edit',
+        name: 'Inventory_Edit',
+        component: Inventory_Edit,
         meta: {
             layout: true,
         },
