@@ -103,8 +103,3 @@ export default {
   name: "Product-List",
 };
 </script>
-<style scoped>
-.table > tr {
-  border: 0;
-}
-</style>
