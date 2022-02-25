@@ -81,31 +81,24 @@
                 </div>
             </div>
             <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Inventory : </label></div>
-                <div class="col-12 col-md-8">
-                    <input type="text" class="form-control" placeholder="Paste your categori here...."/>
+                <div class="col-md-4"><label for="">Category : </label></div>
+                <div class="col-md-8">
+                    <select class="form-select">
+                        <option value="0" selected disabled>Select Category</option>
+                        <option value="1" >Category 1</option>
+                        <option value="2" >Category 2</option>
+                        <option value="3" >Category 3</option>
+                    </select>
                 </div>
             </div>
-            <div class="input-group mb-3">
-                <div class="col-md-6 d-md-flex">
-                    <div class="col-md-4"><label for="">Category : </label></div>
-                    <div class="col-md-8">
-                        <select class="form-select">
-                            <option value="0" selected disabled>Select Category</option>
-                            <option value="1" >Category 1</option>
-                            <option value="2" >Category 2</option>
-                            <option value="3" >Category 3</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6 d-md-flex">
-                    <div class="col-md-4"><label for="">Type: </label></div>
-                    <div class="col-md-8">
-                        <select class="form-select">
-                            <option value="1" selected>Physical</option>
-                            <option value="2" >Digital</option>
-                        </select>
-                    </div>
+            <div class="form-group d-md-flex">
+                <div class="col-md-4"><label for="">Inventory : </label></div>
+                <div class="col-md-8 d-flex justify-content-between">
+                    <input type="text" class="form-control" placeholder="Paste your Inventory name here...."/>
+                    <select class="form-select w-75 ml-2">
+                        <option value="1" selected>Physical</option>
+                        <option value="2" >Digital</option>
+                    </select>
                 </div>
             </div>
             <div class="d-flex justify-content-end m-3">
