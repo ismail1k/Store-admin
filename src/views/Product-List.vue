@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <div class="d-flex justify-content-end m-3">
+    <div class="mx-2">
+        <div class="d-flex justify-content-end my-2">
             <button type="button" class="btn btn-outline-primary">Create Product</button>
         </div>
-        <div class="m-3">
+        <div class="my-2">
             <table class="table table-bordered">
                 <tr>
                     <th>Product</th>
@@ -48,9 +48,19 @@
                 </tr>
             </table>
         </div>
-        <div class="m-3">
+        <div class="my-2">
             <div class="input-group mb-3">
-                <input type="file" class="form-control" id="inputGroupFile02" />
+                <div class="col-md-4"><label for="">Images: </label></div>
+                <div class="col-12 col-md-8 d-flex">
+                    <div class="col-6">
+                        <input type="file" class="form-control"/>
+                        <small><i>Chose a primary image for the thumbnail.</i></small>
+                    </div>
+                    <div class="col-6">
+                        <input type="file" class="form-control" multiple/>
+                        <small><i>You can add more images if you have.</i></small>
+                    </div>
+                </div>
             </div>
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Product Name: </label></div>
@@ -79,12 +89,12 @@
             <div class="input-group mb-3">
                 <div class="col-md-4"><label for="">Category : </label></div>
                 <div class="col-md-8">
-                <select class="form-select" id="inputGroupSelect02">
-                    <option value="0" selected disabled>Select Category</option>
-                    <option value="1" >Category 1</option>
-                    <option value="2" >Category 2</option>
-                    <option value="3" >Category 3</option>
-                </select>
+                    <select class="form-select">
+                        <option value="0" selected disabled>Select Category</option>
+                        <option value="1" >Category 1</option>
+                        <option value="2" >Category 2</option>
+                        <option value="3" >Category 3</option>
+                    </select>
                 </div>
             </div>
             <div class="d-flex justify-content-end m-3">
