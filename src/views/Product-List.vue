@@ -9,10 +9,10 @@
       <!--Starting table-->
       <table class="table table-bordered">
         <tr>
-          <th>product</th>
+          <th>Product</th>
           <th>Description</th>
           <th>Category</th>
-          <th>Stocke</th>
+          <th>Quantity</th>
           <th>Price</th>
 
           <th width="150px">Action</th>
@@ -66,6 +66,9 @@
       <!--ending table-->
     </div>
     <div class="m-3">
+      <div class="input-group mb-3">
+        <input type="file" class="form-control" id="inputGroupFile02" />
+      </div>
       <div class="form-group d-md-flex">
         <div class="col-md-4"><label for="">Product Name: </label></div>
         <div class="col-12 col-md-8">
@@ -76,16 +79,13 @@
           />
         </div>
       </div>
-      <div class="input-group mb-3">
-        <input type="file" class="form-control" id="inputGroupFile02" />
-      </div>
       <div class="form-group d-md-flex">
         <div class="col-md-4"><label for="">Description : </label></div>
         <div class="col-12 col-md-8">
           <input
             type="text"
             class="form-control"
-            placeholder="Paste your sescription here...."
+            placeholder="Paste your description here...."
           />
         </div>
       </div>
@@ -99,13 +99,17 @@
           />
         </div>
       </div>
-      <div class="input-group mb-3"  >
+      <div class="input-group mb-3">
         <div class="col-md-4"><label for="">Category : </label></div>
-        <select class="form-select" id="inputGroupSelect02">
-          <option selected>Choose...</option>
-          <option value="1">On stock</option>
-          <option value="2">off stock</option>
-        </select>
+        <div class="col-md-8">
+            <select class="form-select" id="inputGroupSelect02">
+                <option value="1" selected>In stock</option>
+                <option value="2">Out stock</option>
+            </select>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end m-3">
+      <button type="button" class="btn btn-outline-success">Success</button>
       </div>
     </div>
   </div>
