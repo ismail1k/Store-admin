@@ -68,12 +68,45 @@
     <div class="m-3">
       <div class="form-group d-md-flex">
         <div class="col-md-4"><label for="">Product Name: </label></div>
-        <div class="col-12 col-md-8"><input type="text" class="form-control" placeholder="Product name...."></div>
+        <div class="col-12 col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Product name...."
+          />
+        </div>
       </div>
-<div class="input-group mb-3">
-  <input type="file" class="form-control" id="inputGroupFile02">
-  <label class="input-group-text" for="inputGroupFile02">Upload</label>
-</div>
+      <div class="input-group mb-3">
+        <input type="file" class="form-control" id="inputGroupFile02" />
+      </div>
+      <div class="form-group d-md-flex">
+        <div class="col-md-4"><label for="">Description : </label></div>
+        <div class="col-12 col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Paste your sescription here...."
+          />
+        </div>
+      </div>
+      <div class="form-group d-md-flex">
+        <div class="col-md-4"><label for="">Inventory : </label></div>
+        <div class="col-12 col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Paste your categori here...."
+          />
+        </div>
+      </div>
+      <div class="input-group mb-3"  >
+        <div class="col-md-4"><label for="">Category : </label></div>
+        <select class="form-select" id="inputGroupSelect02">
+          <option selected>Choose...</option>
+          <option value="1">On stock</option>
+          <option value="2">off stock</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
