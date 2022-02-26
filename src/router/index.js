@@ -7,6 +7,7 @@ import ProductList from '@/views/Product-List.vue'
 import ProductView from '@/views/Product-View.vue'
 import Inventory from '@/views/Inventory.vue'
 import Inventory_Edit from '@/views/Inventory_Edit.vue'
+import Customers from '@/views/Customers.vue'
 
 //Other Path
 import C404 from '@/views/C404.vue'
@@ -64,6 +65,14 @@ const routes = [
         path: '/inventory/:inventory_id/edit',
         name: 'Inventory_Edit',
         component: Inventory_Edit,
+        meta: {
+            layout: true,
+        },
+    },
+    {
+        path: '/customer',
+        name: 'Customers',
+        component: Customers,
         meta: {
             layout: true,
         },
