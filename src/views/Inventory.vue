@@ -24,6 +24,7 @@
                     <td><span v-text="inventory.name"></span><i v-if="inventory.digital">(Digital)</i></td>
                     <td><span v-text="inventory.quantity"></span></td>
                     <td>
+                        <a href="javascript:void(0)" class="text-danger" @click="remove(inventory.id)"><i class="fa-solid fa-trash-can"></i></a>
                         <router-link :to="'/inventory/'+inventory.id+'/edit'"><i class="fa-solid fa-pen-to-square"></i></router-link>
                     </td>
                 </tr>
@@ -92,8 +93,30 @@ export default {
                 self.load()
             })
         },
-        remove: function(id){
-            console.log(id)
+        remove: function(inventory_id){
+            let self = this
+            let toast = useToast()
+            this.loading = true
+            axios.get(this.$api+'/inventory/remove', {
+                params: {
+                    token: localStorage.getItem('token'),
+                    inventory_id: inventory_id,
+                },
+            })
+            .then(function(response){
+                if(response.data.status == 200){
+                    toast.info('Inventory removed!')
+                }
+                console.log(response.data)
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+                self.load()
+            })
         },
     },
     created(){
