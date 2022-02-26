@@ -3,7 +3,11 @@
         <div class="card-header">
             <div class="d-flex align-items-center">
                 <input type="text" class="form-control" v-model="inventory_name" placeholder="New inventory">
-                <button class="btn btn-outline-primary ml-3 px-4" @click="make()">Create</button>
+                <select class="form-control mx-2 col-2" v-model="inventory_type">
+                    <option value="1">Physical</option>
+                    <option value="2">Digital</option>
+                </select>
+                <button class="btn btn-outline-primary px-4" @click="make()">Create</button>
             </div>
         </div>
         <div class="card-body">
@@ -17,7 +21,7 @@
                 </tr>
                 <tr class="border-0" v-for="(inventory, index) in inventories" :key="(inventory, index)">
                     <td><span v-text="index+1"></span></td>
-                    <td><span v-text="inventory.name"></span></td>
+                    <td><span v-text="inventory.name"></span><i v-if="inventory.digital">(Digital)</i></td>
                     <td><span v-text="inventory.quantity"></span></td>
                     <td>
                         <router-link :to="'/inventory/'+inventory.id+'/edit'"><i class="fa-solid fa-pen-to-square"></i></router-link>
@@ -37,6 +41,7 @@ export default {
             loading: false,
             inventories: false,
             inventory_name: '',
+            inventory_type: 1,
         }
     },
     name: 'Inventory',
@@ -74,6 +79,7 @@ export default {
             axios.post(this.$api+'/inventory/new', {
                 token: localStorage.getItem('token'),
                 name: self.inventory_name.trim(),
+                type: self.inventory_type,
             })
             .then(function(){
                 toast.info('Inventory created!')

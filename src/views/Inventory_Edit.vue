@@ -9,7 +9,7 @@
         <div class="cart-body" v-else>
             <div class="d-flex my-1">
                 <div class="col-4"><span>Inventory Name: </span> </div>
-                <div class="col-8"><input type="text" v-model="inventory.name" class="form-control form-control-sm"></div>
+                <div class="col-8"><input type="text" v-model="inventory.name" class="form-control" disabled></div>
             </div>
             <div class="d-flex my-1">
                 <div class="col-4"><span>Quantity (<span>
@@ -18,12 +18,12 @@
                 </span>): </span> </div>
                 <div class="col-8">
                     <div class="input-group">
-                        <input type="text" class="form-control" v-model="inventory.quantity" placeholder="Set the quantity you want to add." :disabled="!inventory.digital">
+                        <input type="text" class="form-control" v-model="inventory.quantity" placeholder="Set the quantity you want to add." :disabled="inventory.digital">
                         <span class="input-group-text" id="basic-addon2">item</span>
                     </div>
                 </div>
             </div>
-            <div class="my-3" v-if="!inventory.digital">
+            <div class="my-3" v-if="inventory.digital">
                 <table class="table table-bordered">
                     <tr>
                         <th width="50px">#</th>
@@ -85,7 +85,7 @@ export default {
             })
             .then(function(response){
                 self.inventory = response.data
-                if(!self.inventory.digital){
+                if(self.inventory.digital){
                     self.inventory.items.forEach(item => {
                         let index = self.inventory.items.indexOf(item)
                         self.inventory.items[index].valid = item.valid==1?true:false
@@ -154,7 +154,26 @@ export default {
             })
         },
         save: function(){
-
+            let self = this
+            let toast = useToast()
+            if(!this.inventory.digital){
+                axios.post(this.$api+'/inventory/increment', {
+                    token: localStorage.getItem('token'),
+                    inventory_id: self.inventory.id,
+                    quantity: self.inventory.quantity,
+                })
+                .then(function(response){
+                    console.log(response.data)
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                    self.$router.back()
+                })
+            }
         },
     },
     mounted(){
