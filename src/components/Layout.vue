@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <router-link class="navbar-brand" to="/">Management</router-link>
+            <router-link class="navbar-brand" to="/">Welcome</router-link>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             
             <ul class="navbar-nav ml-auto mr-md-0">
@@ -15,7 +15,7 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav" v-if="menu.length">
-                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <div class="sb-sidenav-menu-heading">Management</div>
                             <router-link v-for="m in menu" :key="m" class="nav-link" :to="'/'+m.url">
                                 <div class="sb-nav-link-icon"><i :class="'fas fa-'+m.icon"></i></div>
                                 {{m.name}}
@@ -37,9 +37,8 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div>
-                            </div>
-                            <div class="text-muted">Copyright &copy; {{$hostname}} 2021</div>
+                            <div></div>
+                            <div class="text-muted">Copyright &copy; {{$hostname}} {{new Date().getFullYear()}}</div>
                         </div>
                     </div>
                 </footer>

@@ -4,7 +4,7 @@
             <button type="button" class="btn btn-outline-primary">Create Product</button>
         </div>
         <div class="my-2">
-            <table class="table table-bordered">
+            <table class="table">
                 <tr>
                     <th>Product</th>
                     <th>Description</th>

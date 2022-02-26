@@ -8,68 +8,55 @@
         <spinner v-if="loading"></spinner>
         <div class="cart-body" v-else>
             <div class="d-flex my-1">
-                <div class="col-6"><span>Inventory Name: </span> </div>
-                <div class="col-6"><span class="text-primary" v-text="inventory.name"></span></div>
+                <div class="col-4"><span>Inventory Name: </span> </div>
+                <div class="col-8"><input type="text" v-model="inventory.name" class="form-control form-control-sm"></div>
             </div>
             <div class="d-flex my-1">
-                <div class="col-6"><span>Inventory Type: </span> </div>
-                <div class="col-6">
-                    <span class="text-primary" v-if="inventory.digital">Digital</span>
-                    <span class="text-primary" v-if="!inventory.digital">Physical</span>
+                <div class="col-4"><span>Quantity (<span>
+                    <i v-if="inventory.digital">Digital</i>
+                    <i v-if="!inventory.digital">Physical</i>
+                </span>): </span> </div>
+                <div class="col-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" v-model="inventory.quantity" placeholder="Set the quantity you want to add." :disabled="!inventory.digital">
+                        <span class="input-group-text" id="basic-addon2">item</span>
+                    </div>
                 </div>
             </div>
-            <div class="d-flex my-1">
-                <div class="col-6"><span>Quantity: </span> </div>
-                <div class="col-6"><span class="text-primary"><span v-text="inventory.items.length"></span> Items</span></div>
-            </div>
-            <div class="my-3" v-if="inventory.items && !inventory.digital">
-                <table class="table table-bordered" v-if="inventory.items.length">
+            <div class="my-3" v-if="!inventory.digital">
+                <table class="table table-bordered">
                     <tr>
                         <th width="50px">#</th>
                         <th>Value</th>
-                        <th width="100px">Availability</th>
                         <th width="50px">Action</th>
                     </tr>
                     <tr v-for="item, index in inventory.items" :key="(item, index)">
                         <td v-text="index+1"></td>
                         <td v-text="item.value"></td>
                         <td align="center">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" :value="inventory.items[index].valid" v-model="inventory.items[index].valid" class="custom-control-input" :id="'customSwitch_'+index">
-                                <label class="custom-control-label" :for="'customSwitch_'+index"></label>
-                            </div>
-                        </td>
-                        <td align="center">
-                            <span class="text-danger btn" @click="removeItem(index)"><i class="fa-solid fa-xmark"></i></span>
+                            <span class="text-danger btn" @click="removeItem(item.id)"><i class="fa-solid fa-xmark"></i></span>
                         </td>
                     </tr>
                     <tr>
                         <td>--</td>
                         <td>
                             <div class="p-1">
-                                <input type="text" class="form-control form-control-sm" placeholder="Add new item">
+                                <input type="text" v-model="newItemKey" class="form-control form-control-sm" placeholder="Add new item">
                             </div>
                         </td>
                         <td align="center">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="customSwitch2">
-                                <label class="custom-control-label" for="customSwitch2"></label>
-                            </div>
-                        </td>
-                        <td align="center">
-                            <span class="text-success btn"><i class="fa-solid fa-check"></i></span>
+                            <span class="text-success btn" @click="insertItem()"><i class="fa-solid fa-check"></i></span>
                         </td>
                     </tr>
                 </table>
             </div>
-            <div class="d-flex justify-content-end my-1">
-                <button class="btn btn-primary" :disabled="save == false">Save</button>
+            <div class="d-flex justify-content-end mx-2">
+                <button class="btn btn-primary" @click="save()">Save</button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import _ from 'lodash'
 import axios from 'axios'
 import Spinner from '@/components/Spinner.vue'
 import { useToast } from "vue-toastification"
@@ -78,8 +65,7 @@ export default {
         return {
             loading: true,
             inventory: false,
-            inventory_origin: false,
-            save: false,
+            newItemKey: '',
         }
     },
     name: 'Inventory_Edit',
@@ -99,12 +85,12 @@ export default {
             })
             .then(function(response){
                 self.inventory = response.data
-                self.inventory.items.forEach(item => {
-                    let index = self.inventory.items.indexOf(item)
-                    self.inventory.items[index].valid = item.valid==1?true:false
-                })
-                self.inventory_origin = self.inventory
-                console.log(self.inventory_origin)
+                if(!self.inventory.digital){
+                    self.inventory.items.forEach(item => {
+                        let index = self.inventory.items.indexOf(item)
+                        self.inventory.items[index].valid = item.valid==1?true:false
+                    })
+                }
             })
             .catch(function(error){
                 toast.error('Error!')
@@ -114,21 +100,61 @@ export default {
                 self.loading = false
             })
         },
-        removeItem: function(index){
-            this.inventory.items.splice(index, 1)
-        },
-    },
-    watch: {
-        inventory: {
-            handler(){
-                console.log(this.inventory)
-                console.log(this.inventory_origin)
-                if(_.isEqual(this.inventory_origin, this.inventory)){
-                    this.save = false
-                } else {
-                    this.save = true
+        insertItem: function(){
+            let inventory_id = this.inventory.id
+            let value = this.newItemKey
+            let self = this
+            let toast = useToast()
+            if(!value){
+                toast.warning('New items much be not empty!')
+                return false
+            }
+            this.loading = true
+            axios.post(this.$api+'/inventory/increment', {
+                token: localStorage.getItem('token'),
+                value: value,
+                inventory_id: inventory_id,
+            })
+            .then(function(response){
+                if(response.data.status == 200){
+                    self.load()
                 }
-            },
+                if(response.data.status == 500){
+                    toast.warning('Item already exist!')
+                }
+                console.log(response.data)
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+            })
+        },
+        removeItem: function(sku_id){
+            let toast = useToast()
+            let self = this
+            this.loading = true
+            console.log(sku_id)
+            axios.post(this.$api+'/inventory/descrement', {
+                sku_id: sku_id,
+                token: localStorage.getItem('token'),
+            })
+            .then(function(response){
+                self.load()
+                console.log(response.data)
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+            })
+        },
+        save: function(){
+
         },
     },
     mounted(){
