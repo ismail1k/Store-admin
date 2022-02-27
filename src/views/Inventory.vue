@@ -1,5 +1,5 @@
 <template>
-    <div class="container my-3">
+    <div class="container my-2">
         <div class="card-header">
             <div class="d-flex align-items-center">
                 <input type="text" class="form-control" v-model="inventory_name" placeholder="New inventory">
@@ -16,15 +16,17 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Linked to</th>
                     <th>Quantity</th>
                     <th>Action</th>
                 </tr>
                 <tr class="border-0" v-for="(inventory, index) in inventories" :key="(inventory, index)">
                     <td><span v-text="index+1"></span></td>
                     <td><span v-text="inventory.name"></span><i v-if="inventory.digital">(Digital)</i></td>
+                    <td><span v-text="inventory.product"></span>Product</td>
                     <td><span v-text="inventory.quantity"></span></td>
                     <td>
-                        <a href="javascript:void(0)" class="text-danger" @click="remove(inventory.id)"><i class="fa-solid fa-trash-can"></i></a>
+                        <a href="javascript:void(0)" v-if="!inventory.product" class="text-danger" @click="remove(inventory.id)"><i class="fa-solid fa-trash-can"></i></a>
                         <router-link :to="'/inventory/'+inventory.id+'/edit'"><i class="fa-solid fa-pen-to-square"></i></router-link>
                     </td>
                 </tr>
@@ -107,7 +109,6 @@ export default {
                 if(response.data.status == 200){
                     toast.info('Inventory removed!')
                 }
-                console.log(response.data)
             })
             .catch(function(error){
                 toast.error('Error!')

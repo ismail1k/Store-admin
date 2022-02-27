@@ -9,7 +9,7 @@
         <div class="cart-body" v-else>
             <div class="d-flex my-1">
                 <div class="col-4"><span>Inventory Name: </span> </div>
-                <div class="col-8"><input type="text" v-model="inventory.name" class="form-control" disabled></div>
+                <div class="col-8"><input type="text" v-model="inventory.name" class="form-control"></div>
             </div>
             <div class="d-flex my-1">
                 <div class="col-4"><span>Quantity (<span>
@@ -50,8 +50,10 @@
                     </tr>
                 </table>
             </div>
-            <div class="d-flex justify-content-end mx-2">
-                <button class="btn btn-primary" @click="save()">Save</button>
+            <div class="d-flex align-items-center justify-content-end mx-2">
+                <span v-if="inventory.product"><i class="text-muted">if you want to remove this inventory, please go to <router-link to="/product" >product page</router-link> and try to unlink it from all products!</i></span>
+                <button v-if="!inventory.product" class="btn btn-outline-danger" @click="removeInventory()">Remove</button>
+                <button class="btn btn-primary ml-2" @click="save()">Save</button>
             </div>
         </div>
     </div>
@@ -153,6 +155,30 @@ export default {
                 self.loading = false
             })
         },
+        removeInventory: function(){
+            let self = this
+            let toast = useToast()
+            this.loading = true
+            axios.get(this.$api+'/inventory/remove', {
+                params: {
+                    token: localStorage.getItem('token'),
+                    inventory_id: self.inventory.id,
+                },
+            })
+            .then(function(response){
+                if(response.data.status == 200){
+                    toast.info('Inventory removed!')
+                    self.$router.back()
+                }
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+            })
+        },
         save: async function(){
             let self = this
             let toast = useToast()
@@ -162,8 +188,7 @@ export default {
                     inventory_id: self.inventory.id,
                     quantity: self.inventory.quantity,
                 })
-                .then(function(response){
-                    console.log(response.data)
+                .then(function(){
                 })
                 .catch(function(error){
                     toast.error('Error!')
@@ -173,6 +198,20 @@ export default {
                     self.loading = false
                 })
             }
+            await axios.post(this.$api+'/inventory/edit', {
+                token: localStorage.getItem('token'),
+                inventory_id: self.inventory.id,
+                new_name: self.inventory.name,
+            })
+            .then(function(){
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+            })
             toast.info('Changes saved!')
             self.$router.back()
         },
