@@ -96,27 +96,30 @@ export default {
             })
         },
         remove: function(inventory_id){
-            let self = this
-            let toast = useToast()
-            this.loading = true
-            axios.get(this.$api+'/inventory/remove', {
-                params: {
-                    token: localStorage.getItem('token'),
-                    inventory_id: inventory_id,
-                },
-            })
-            .then(function(response){
-                if(response.data.status == 200){
-                    toast.info('Inventory removed!')
-                }
-            })
-            .catch(function(error){
-                toast.error('Error!')
-                console.log(error)
-            })
-            .finally(function(){
-                self.loading = false
-                self.load()
+            this.$confirm("Are you sure you want to remove inventory?")
+            .then(() => {
+                let self = this
+                let toast = useToast()
+                this.loading = true
+                axios.get(this.$api+'/inventory/remove', {
+                    params: {
+                        token: localStorage.getItem('token'),
+                        inventory_id: inventory_id,
+                    },
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        toast.info('Inventory removed!')
+                    }
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                    self.load()
+                })
             })
         },
     },

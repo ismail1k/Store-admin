@@ -69,7 +69,11 @@ export default {
             })
         },
         remove: function(){
-            console.log('remove')
+            this.$confirm("Are you sure you want to remove product?")
+            .then(() => {
+                console.log('remove')
+            })
+            
         }
     },
     created(){

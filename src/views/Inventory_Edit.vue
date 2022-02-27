@@ -48,7 +48,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="d-flex align-items-center justify-content-end mx-2">
+            <div class="d-flex align-items-center justify-content-end m-2">
                 <span v-if="inventory.product"><i class="text-muted">if you want to remove this inventory, please go to <router-link to="/product" >product page</router-link> and try to unlink it from all products!</i></span>
                 <button v-if="!inventory.product" class="btn btn-outline-danger" @click="removeInventory()">Remove</button>
                 <button class="btn btn-primary ml-2" @click="save()">Save</button>
@@ -133,48 +133,55 @@ export default {
             })
         },
         removeItem: function(sku_id){
-            let toast = useToast()
-            let self = this
-            this.loading = true
-            console.log(sku_id)
-            axios.post(this.$api+'/inventory/descrement', {
-                sku_id: sku_id,
-                token: localStorage.getItem('token'),
+            this.$confirm("Are you sure you want to remove item?")
+            .then(() => {
+                let toast = useToast()
+                let self = this
+                this.loading = true
+                console.log(sku_id)
+                axios.post(this.$api+'/inventory/descrement', {
+                    sku_id: sku_id,
+                    token: localStorage.getItem('token'),
+                })
+                .then(function(response){
+                    self.load()
+                    console.log(response.data)
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                })
             })
-            .then(function(response){
-                self.load()
-                console.log(response.data)
-            })
-            .catch(function(error){
-                toast.error('Error!')
-                console.log(error)
-            })
-            .finally(function(){
-                self.loading = false
-            })
+            
         },
         removeInventory: function(){
-            let self = this
-            let toast = useToast()
-            this.loading = true
-            axios.get(this.$api+'/inventory/remove', {
-                params: {
-                    token: localStorage.getItem('token'),
-                    inventory_id: self.inventory.id,
-                },
-            })
-            .then(function(response){
-                if(response.data.status == 200){
-                    toast.info('Inventory removed!')
-                    self.$router.back()
-                }
-            })
-            .catch(function(error){
-                toast.error('Error!')
-                console.log(error)
-            })
-            .finally(function(){
-                self.loading = false
+            this.$confirm("Are you sure you want to remove inventory?")
+            .then(() => {
+                let self = this
+                let toast = useToast()
+                this.loading = true
+                axios.get(this.$api+'/inventory/remove', {
+                    params: {
+                        token: localStorage.getItem('token'),
+                        inventory_id: self.inventory.id,
+                    },
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        toast.info('Inventory removed!')
+                        self.$router.back()
+                    }
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                })
             })
         },
         save: async function(){

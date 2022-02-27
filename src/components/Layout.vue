@@ -13,7 +13,7 @@
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
-                        <div class="nav" v-if="menu.length">
+                        <div class="nav" id="nav" v-if="menu.length">
                             <div class="sb-sidenav-menu-heading">Management</div>
                             <router-link v-for="m in menu" :key="m" class="nav-link" :to="'/'+m.url">
                                 <div class="sb-nav-link-icon"><i :class="'fas fa-'+m.icon"></i></div>
@@ -171,6 +171,9 @@ export default {
         $("#sidebarToggle").on("click", function(e) {
             e.preventDefault()
             $("body").toggleClass("sb-sidenav-toggled")
+        })
+        $(".nav-link").on("click", function(e) {
+            console.log(e)
         })
         let interval = setInterval(async function(){
             await self.loadUser(interval)
