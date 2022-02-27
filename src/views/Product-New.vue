@@ -30,7 +30,7 @@
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Tags: </label></div>
                 <div class="col-12 col-md-8">
-                    <input type="text" v-model="product.name" class="form-control" placeholder="sport, news, blog..." />
+                    <input type="text" v-model="product.tags" class="form-control" placeholder="sport, news, blog..." />
                     <small><i>This helps customers to find the product in the search easy, recommended to use it.</i></small>
                 </div>
             </div>
@@ -93,6 +93,7 @@
     </div>
 </template>
 <script>
+// import axios from 'axios'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { useToast } from "vue-toastification"
 
@@ -103,6 +104,7 @@ export default {
             editorConfig: {},
             product: {
                 name: '',
+                tags: '',
                 short_description: '',
                 description: '',
                 price: {
@@ -122,8 +124,27 @@ export default {
     },
     name: 'Product-New',
     methods: {
-        validate: function(){
-
+        validate: async function(){
+            let product = this.product
+            if(!product.name){
+                this.$alert('Please set a valid Product name!')
+                return false
+            }
+            if(!product.short_description){
+                this.$alert('Please set a valid Short description!')
+                return false
+            }
+            if(product.price.original <= 0.5){
+                this.$alert('Original price!')
+                return false
+            }
+            if(product.category.id == 0 && !product.category.name){
+                return false
+            }
+            if(!product.inventory.type || !product.inventory.name){
+                return false
+            }
+            return false
         },
         insertMedia: function(){
 
@@ -137,9 +158,9 @@ export default {
         createProduct: function(){
 
         },
-        create: function(){
+        create: async function(){
             let toast = useToast()
-            if(!this.validate()){
+            if(!await this.validate()){
                 toast.warning('Bad credentials!')
                 return false
             }

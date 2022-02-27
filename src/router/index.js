@@ -9,6 +9,7 @@ import ProductView from '@/views/Product-View.vue'
 import Inventory from '@/views/Inventory.vue'
 import Inventory_Edit from '@/views/Inventory_Edit.vue'
 import Customers from '@/views/Customers.vue'
+import Settings from '@/views/Settings.vue'
 
 //Other Path
 import C404 from '@/views/C404.vue'
@@ -82,6 +83,14 @@ const routes = [
         path: '/customer',
         name: 'Customers',
         component: Customers,
+        meta: {
+            layout: true,
+        },
+    },
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: Settings,
         meta: {
             layout: true,
         },
