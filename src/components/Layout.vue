@@ -67,12 +67,10 @@ export default {
     },
     methods: {
         loadUser: async function(interval){
-            console.log('LoadUser')
             let user = false
             let self = this
             let toast = useToast()
             if(localStorage.getItem('token')){
-                console.log('token: yes')
                 await axios.get(this.$api+'/auth/me', {
                     params: {
                         token: localStorage.getItem('token'),
@@ -100,7 +98,6 @@ export default {
                 })
             }
             if(!localStorage.getItem('token')){
-                console.log('token: noo')
                 this.$router.push('/login')
                 self.user = user
                 clearInterval(interval)
