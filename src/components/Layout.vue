@@ -52,6 +52,7 @@ import '@/assets/plugins/fontawesome-6.0.0/css/all.css'
 import $ from 'jquery'
 import axios from 'axios'
 import Spinner from './Spinner.vue'
+import { useToast } from "vue-toastification"
 export default {
     data(){
         return {
@@ -65,38 +66,51 @@ export default {
         Spinner,
     },
     methods: {
-        loadUser: async function(){
+        loadUser: async function(interval){
+            console.log('LoadUser')
             let user = false
             let self = this
+            let toast = useToast()
+            if(localStorage.getItem('token')){
+                console.log('token: yes')
+                await axios.get(this.$api+'/auth/me', {
+                    params: {
+                        token: localStorage.getItem('token'),
+                    },
+                })
+                .then(function(response){
+                    if(response.data.admin == true){
+                        user = response.data
+                    } else {
+                        localStorage.setItem('token', '')
+                        self.$router.push('/login')
+                        user = false
+                    }
+                })
+                .catch(function(error){
+                    localStorage.setItem('token', '')
+                    toast.error('Please login to the account again!')
+                    console.log(error)
+                    self.$router.push('/login')
+                    user = false
+                })
+                .finally(function(){
+                    self.user = user
+                    return false
+                })
+            }
             if(!localStorage.getItem('token')){
-                self.$router.push({path: '/login'})
+                console.log('token: noo')
+                this.$router.push('/login')
+                self.user = user
+                clearInterval(interval)
                 return false
             }
-            await axios.get(this.$api+'/auth/me', {
-                params: {
-                    token: localStorage.getItem('token'),
-                },
-            })
-            .then(function(response){
-                if(response.data.admin == true){
-                    user = response.data
-                } else {
-                    localStorage.setItem('token', '')
-                    this.$router.push('/login')
-                    user = false
-                }
-            })
-            .catch(function(error){
-                console.log(error)
-            })
-            .finally(function(){
-                self.user = user
-                return false
-            })
         },
         loadMenu: async function(){
             let menu = false
             let self = this
+            let toast = useToast()
             await axios.get(this.$api+'/data/menu', {
                 params: {
                     token: localStorage.getItem('token'),
@@ -106,14 +120,37 @@ export default {
                 menu = response.data
             })
             .catch(function(error){
+                toast.error('Error!')
                 console.log(error)
             })
             .finally(function(){
                 self.menu = menu
             })
         },
+        loadCurrency: async function(){
+            let self = this
+            let toast = useToast()
+            axios.get(process.env.VUE_APP_API+'/config', {
+                params: {
+                    token: localStorage.getItem('token'),
+                    key: 'currency',
+                },
+            })
+            .then(function(response){
+                response.data.forEach(conf => {
+                    if(conf.key == 'currency'){
+                        self.$store.state.currency = conf.value
+                    }
+                })
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+        },
         logout: function(){
             let self = this
+            let toast = useToast()
             axios.post(this.$api+'/auth/logout', {
                 token: localStorage.getItem('token'),
             })
@@ -122,6 +159,7 @@ export default {
                 self.$router.push({path: '/login'})
             })
             .catch(function(error){
+                toast.error('Error!')
                 console.log(error)
             })
         },
@@ -129,16 +167,17 @@ export default {
     async created(){
         await this.loadUser()
         await this.loadMenu()
+        await this.loadCurrency()
         this.loading = false
     },
     mounted(){
+        let self = this
         $("#sidebarToggle").on("click", function(e) {
             e.preventDefault()
             $("body").toggleClass("sb-sidenav-toggled")
         })
-        let self = this
-        setInterval(async function(){
-            await self.loadUser()
+        let interval = setInterval(async function(){
+            await self.loadUser(interval)
         }, 10000)
     },
 }
