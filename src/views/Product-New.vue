@@ -1,7 +1,11 @@
 <template>
     <div class="container my-2">
-        <div class="card-header d-flex justify-content-start my-2">
-            <button @click="$router.back()" class="btn btn-outline-primary">Return Back</button>
+        <div class="card-header d-flex justify-content-between align-items-center my-2">
+            <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
+            <div class="d-flex justify-content-end">
+                <router-link to="/category" class="btn btn-outline-primary ml-2">Categories</router-link>
+                <router-link to="/inventory" class="btn btn-outline-primary ml-2">Inventories</router-link>
+            </div>
         </div>
         <div>
             <div class="input-group mb-3">
@@ -9,7 +13,7 @@
                 <div class="col-12 col-md-8 d-flex px-0">
                     <div class="col-6">
                         <input type="file" class="form-control"/>
-                        <small><i>Chose a primary image for the thumbnail.</i></small>
+                        <small><i>Choose a primary image for the thumbnail.</i></small>
                     </div>
                     <div class="col-6">
                         <input type="file" class="form-control" multiple/>
@@ -32,7 +36,7 @@
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Description : </label></div>
                 <div class="col-12 col-md-8">
-                    <textarea class="form-control" placeholder="Paste your description here...."></textarea>
+                    <ckeditor class="border" :editor="editor" v-model="product.description"></ckeditor>
                 </div>
             </div>
             <div class="form-group d-md-flex">
@@ -62,3 +66,32 @@
         </div>
     </div>
 </template>
+<script>
+import ClassicEditor from '@ckeditor/ckeditor5-build-balloon-block';
+// import CKEditor from '@ckeditor/ckeditor5-build-balloon-block';
+export default {
+    data(){
+        return {
+            editor: ClassicEditor,
+            editorConfig: {
+                toolbar: [ 'bold', 'italic', '|', 'link' ]
+            },
+            product: {
+                name: '',
+                short_description: '',
+                description: '',
+                category: 0,
+                inventory:{
+                    name: '',
+                    type: '2',
+                },
+            },
+        }
+    },
+    name: 'Product-New',
+    methods: {
+        create: function(){
+        },
+    }
+}
+</script>

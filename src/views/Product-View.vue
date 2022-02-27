@@ -1,7 +1,7 @@
 <template>
     <div class="container my-2">
-        <div class="card-header d-flex justify-content-start my-2">
-            <button @click="$router.back()" class="btn btn-outline-primary">Return Back</button>
+        <div class="card-header d-flex justify-content-between align-items-center my-2">
+            <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
         </div>
         <div>
             <div class="input-group mb-3">
@@ -9,7 +9,7 @@
                 <div class="col-12 col-md-8 d-flex px-0">
                     <div class="col-6">
                         <input type="file" class="form-control"/>
-                        <small><i>Chose a primary image for the thumbnail.</i></small>
+                        <small><i>Choose a primary image for the thumbnail.</i></small>
                     </div>
                     <div class="col-6">
                         <input type="file" class="form-control" multiple/>

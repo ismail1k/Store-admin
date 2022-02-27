@@ -9,18 +9,18 @@
                 <tr>
                     <th>#</th>
                     <th>Product</th>
-                    <th width="150px">Quantity</th>
-                    <th width="150px">Price</th>
-                    <th width="150px">Action</th>
+                    <th width="100px">Quantity</th>
+                    <th width="100px">Price</th>
+                    <th width="130px">Action</th>
                 </tr>
                 <tr v-for="product, index in products" :key="(product, index)">
                     <td v-text="index+1"></td>
                     <td>
                         <b><span v-text="product.name"></span></b>
                         <span v-if="product.inventory.digital"><small><i>(Digital)</i></small></span><br>
-                        <i class=""><small v-text="product.short_description.substring(0, 180)"></small>...</i>
+                        <i class="d-none d-md-block py-0"><small v-text="product.short_description.substring(0, 180)"></small>...</i>
                     </td>
-                    <td><span v-text="product.inventory.quantity"></span></td>
+                    <td><span v-text="product.inventory.quantity"></span>Item</td>
                     <td><span v-text="product.price-product.discount"></span>{{$store.state.currency}}</td>
                     <td>
                         <a class="btn text-danger py-0 mx-1" @click="remove(product.id)"><i class="fa-solid fa-trash-can"></i></a>

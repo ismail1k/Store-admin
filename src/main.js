@@ -5,6 +5,7 @@ import axios from 'axios'
 import jQuery from 'jquery'
 import router from './router'
 import Toast, { POSITION } from "vue-toastification"
+import CKEditor from '@ckeditor/ckeditor5-vue'
 import "vue-toastification/dist/index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
@@ -51,4 +52,4 @@ const options = {
     containerClassName: "px-2"
 }
 window.$ = jQuery;
-app.use(router).use(store).use(Toast, options).mount('#app')
+app.use(router).use(store).use(Toast, options).use(CKEditor).mount('#app')

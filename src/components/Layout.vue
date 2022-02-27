@@ -3,7 +3,6 @@
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <router-link class="navbar-brand" to="/">Welcome</router-link>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            
             <ul class="navbar-nav ml-auto mr-md-0">
                 <li class="nav-item dropdown" @click="logout()">
                     <a class="nav-link"><i class="fas fa-arrow-right-from-bracket fa-fw"></i></a>
@@ -67,9 +66,9 @@ export default {
     },
     methods: {
         loadUser: async function(interval){
+            let toast = useToast()
             let user = false
             let self = this
-            let toast = useToast()
             if(localStorage.getItem('token')){
                 await axios.get(this.$api+'/auth/me', {
                     params: {
@@ -127,7 +126,7 @@ export default {
         loadCurrency: async function(){
             let self = this
             let toast = useToast()
-            axios.get(process.env.VUE_APP_API+'/config', {
+            await axios.get(process.env.VUE_APP_API+'/config', {
                 params: {
                     token: localStorage.getItem('token'),
                     key: 'currency',

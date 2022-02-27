@@ -1,9 +1,7 @@
 <template>
     <div class="container my-3">
-        <div class="card-header">
-            <div class="d-flex align-items-center justify-content-end">
-                <button class="btn btn-outline-primary ml-3 px-4" @click="$router.back()">Back</button>
-            </div>
+        <div class="card-header d-flex justify-content-between align-items-center my-2">
+            <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
         </div>
         <spinner v-if="loading"></spinner>
         <div class="cart-body" v-else>
