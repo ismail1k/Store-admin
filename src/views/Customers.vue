@@ -1,5 +1,10 @@
 <template>
     <div class="container my-2">
+        <div class="card-header my-2">
+            <div class="d-flex justify-content-end">
+                <router-link to="/settings" class="btn btn-outline-primary">Settings</router-link>
+            </div>
+        </div>
         <table class="table">
             <tr>
                 <th width="25px">#</th>

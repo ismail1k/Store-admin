@@ -24,73 +24,95 @@
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Product Name: </label></div>
                 <div class="col-12 col-md-8">
-                    <input type="text" class="form-control" placeholder="Product name...." />
+                    <input type="text" v-model="product.name" class="form-control" placeholder="Product name" />
                 </div>
             </div>
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Short Description : </label></div>
                 <div class="col-12 col-md-8">
-                    <input type="text" class="form-control" placeholder="Paste your short description here...." />
+                    <textarea type="text" v-model="product.short_description" class="form-control" placeholder="Short Description" />
                 </div>
             </div>
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Description : </label></div>
                 <div class="col-12 col-md-8">
-                    <ckeditor class="border" :editor="editor" v-model="product.description"></ckeditor>
+                    <ckeditor class="border" v-model="product.description" :editor="editor" :config="editorConfig"></ckeditor>
                 </div>
             </div>
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Category : </label></div>
-                <div class="col-md-8">
-                    <select class="form-select">
-                        <option value="0" selected disabled>Select Category</option>
-                        <option value="1" >Category 1</option>
-                        <option value="2" >Category 2</option>
-                        <option value="3" >Category 3</option>
+                <div class="col-md-8 d-flex justify-content-between">
+                    <select class="form-select" v-model="product.category.id">
+                        <option value="null" selected disabled>Select Category</option>
+                        <option value="1">Category 1</option>
+                        <option value="2">Category 2</option>
+                        <option value="3">Category 3</option>
+                        <option value="0">New Category</option>
                     </select>
+                    <input v-if="product.category.id == 0" v-model="product.category.name" type="text" class="col-9 form-control ml-2" placeholder="Category name">
                 </div>
             </div>
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Inventory : </label></div>
                 <div class="col-md-8 d-flex justify-content-between">
-                    <input type="text" class="form-control" placeholder="Paste your Inventory name here...."/>
-                    <select class="form-select w-75 ml-2">
+                    <select class="form-select" v-model="product.inventory.type">
                         <option value="1" selected>Physical</option>
-                        <option value="2" >Digital</option>
+                        <option value="2">Digital</option>
                     </select>
+                    <input type="text" v-model="product.inventory.name" class="col-9 form-control ml-2" placeholder="Inventory name"/>
                 </div>
             </div>
             <div class="d-flex justify-content-end m-3">
-                <button type="button" class="btn btn-outline-success">Create</button>
+                <button type="button" class="btn btn-outline-success" @click="create()">Create</button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-balloon-block';
-// import CKEditor from '@ckeditor/ckeditor5-build-balloon-block';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { useToast } from "vue-toastification"
+
 export default {
     data(){
         return {
             editor: ClassicEditor,
-            editorConfig: {
-                toolbar: [ 'bold', 'italic', '|', 'link' ]
-            },
+            editorConfig: {},
             product: {
                 name: '',
                 short_description: '',
                 description: '',
-                category: 0,
+                category: {
+                    id: null,
+                    name: '',
+                },
                 inventory:{
                     name: '',
-                    type: '2',
+                    type: 1,
                 },
             },
         }
     },
     name: 'Product-New',
     methods: {
+        validate: function(){
+
+        },
+        insertMedia: function(){
+
+        },
+        createCategory: function(){
+
+        },
+        createInventory: function(){
+
+        },
         create: function(){
+            let toast = useToast()
+            if(!this.validate()){
+                toast.error('Error!')
+                return false
+            }
+            console.log(this.product)
         },
     }
 }
