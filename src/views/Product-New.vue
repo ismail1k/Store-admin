@@ -28,9 +28,16 @@
                 </div>
             </div>
             <div class="form-group d-md-flex">
+                <div class="col-md-4"><label for="">Tags: </label></div>
+                <div class="col-12 col-md-8">
+                    <input type="text" v-model="product.name" class="form-control" placeholder="sport, news, blog..." />
+                    <small><i>This helps customers to find the product in the search easy, recommended to use it.</i></small>
+                </div>
+            </div>
+            <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Short Description : </label></div>
                 <div class="col-12 col-md-8">
-                    <textarea type="text" v-model="product.short_description" class="form-control" placeholder="Short Description" />
+                    <textarea type="text" v-model="product.short_description" class="form-control" placeholder="Small Description" />
                 </div>
             </div>
             <div class="form-group d-md-flex">
@@ -62,6 +69,23 @@
                     <input type="text" v-model="product.inventory.name" class="col-9 form-control ml-2" placeholder="Inventory name"/>
                 </div>
             </div>
+            <div class="form-group d-md-flex">
+                <div class="col-md-4"><label for="">Price : </label></div>
+                <div class="col-md-8 d-flex justify-content-between">
+                    <div class="col-4 px-0">
+                        <input type="number" step="0.01" v-model="product.price.original" class="form-control text-center" placeholder="Original Price"/>
+                        <small><i>Original Price</i></small>
+                    </div>
+                    <div class="col-4 px-0 mx-1">
+                        <input type="number" step="0.01" v-model="product.price.discount" class="form-control text-center" placeholder="Discount"/>
+                        <small><i>Discount</i></small>
+                    </div>
+                    <div class="px-0 mr-1">
+                        <input type="text" :value="parseInt(product.price.original - product.price.discount)+' '+$store.state.currency" class="form-control text-center" placeholder="Discount" readonly/>
+                        <small><i>Selling Price</i></small>
+                    </div>
+                </div>
+            </div>
             <div class="d-flex justify-content-end m-3">
                 <button type="button" class="btn btn-outline-success" @click="create()">Create</button>
             </div>
@@ -81,6 +105,10 @@ export default {
                 name: '',
                 short_description: '',
                 description: '',
+                price: {
+                    original: 0.01,
+                    discount: 0,
+                },
                 category: {
                     id: null,
                     name: '',
@@ -106,14 +134,35 @@ export default {
         createInventory: function(){
 
         },
+        createProduct: function(){
+
+        },
         create: function(){
             let toast = useToast()
             if(!this.validate()){
-                toast.error('Error!')
+                toast.warning('Bad credentials!')
                 return false
             }
-            console.log(this.product)
+            if(!this.insertMedia()){
+                toast.warning('Cannot insert images!')
+                return false
+            }
+            if(!this.createCategory()){
+                toast.warning('Cannot create category!')
+                return false
+            }
+            if(!this.createInventory()){
+                toast.warning('Cannot create inventory!')
+                return false
+            }
+            if(!this.createInventory()){
+                toast.warning('Cannot create product!')
+                return false
+            }
         },
+    },
+    mounted(){
+        this.$alert('fesdfsae')
     }
 }
 </script>

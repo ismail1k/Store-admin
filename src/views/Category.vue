@@ -62,28 +62,32 @@ export default {
             })
         },
         remove: function(id){
-            const toast = useToast()
-            let self = this
-            axios.post(this.$api+'/category/remove', {
-                token: localStorage.getItem('token'),
-                category_id: id,
-            })
-            .then(function(response){
-                if(response.data.status == 200){
-                    toast.info("Category removed!")
-                }else if(response.data.status == 403){
-                    toast.warning('Permission denied!')
-                }else{
-                    toast.error('Error!')
-                }
-            })
-            .catch(function(error){
-                toast.error("Error!")
-                console.log(error)
-            })
-            .finally(function(){
-                self.load()
-            })
+            this.$confirm("Are you sure you want to remove category?")
+            .then(() => {
+                const toast = useToast()
+                let self = this
+                axios.post(this.$api+'/category/remove', {
+                    token: localStorage.getItem('token'),
+                    category_id: id,
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        toast.info("Category removed!")
+                    }else if(response.data.status == 403){
+                        toast.warning('Permission denied!')
+                    }else{
+                        toast.error('Error!')
+                    }
+                })
+                .catch(function(error){
+                    toast.error("Error!")
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.load()
+                })
+            });
+            
         },
         make: function(){
             let toast = useToast()
