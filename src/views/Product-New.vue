@@ -161,8 +161,5 @@ export default {
             }
         },
     },
-    mounted(){
-        this.$alert('fesdfsae')
-    }
 }
 </script>
