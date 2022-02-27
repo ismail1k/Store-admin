@@ -172,9 +172,6 @@ export default {
             e.preventDefault()
             $("body").toggleClass("sb-sidenav-toggled")
         })
-        $(".nav-link").on("click", function(e) {
-            console.log(e)
-        })
         let interval = setInterval(async function(){
             await self.loadUser(interval)
         }, 10000)
