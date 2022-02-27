@@ -83,11 +83,23 @@
         </div>
       </div>
       <div>
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select " aria-label="Default select example">
           <option selected>Memeber</option>
           <option class="text-success">Staff</option>
           <option class="text-danger">Owner</option>
         </select>
+      </div>
+      <div class="fw-bolder mt-5">Give access to:</div>
+      <div class="form-check form-switch mt-3">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault"
+          >Dashboard</label
+        >
       </div>
       <div class="d-flex justify-content-end mx-3 px-3 mt-3">
         <button type="button" class="btn btn-outline-success">Create</button>
