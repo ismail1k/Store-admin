@@ -153,11 +153,11 @@ export default {
                 self.loading = false
             })
         },
-        save: function(){
+        save: async function(){
             let self = this
             let toast = useToast()
             if(!this.inventory.digital){
-                axios.post(this.$api+'/inventory/increment', {
+                await axios.post(this.$api+'/inventory/increment', {
                     token: localStorage.getItem('token'),
                     inventory_id: self.inventory.id,
                     quantity: self.inventory.quantity,
@@ -171,9 +171,10 @@ export default {
                 })
                 .finally(function(){
                     self.loading = false
-                    self.$router.back()
                 })
             }
+            toast.info('Changes saved!')
+            self.$router.back()
         },
     },
     mounted(){
