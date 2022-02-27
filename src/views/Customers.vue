@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="container my-2">
     <table class="table">
       <thead>
         <tr class="shadow-none p-3 mb-5 bg-light rounded">
           <th scope="col" class="text-success">
-            <h4><strong>Name</strong></h4>
+            <a><b>Name</b></a>
           </th>
           <th scope="col" class="text-success">
             <h4><strong>Gmail</strong></h4>

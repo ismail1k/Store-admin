@@ -62,6 +62,9 @@ export default {
                 self.loading = false
             })
         },
+        remove: function(){
+            console.log('remove')
+        }
     },
     created(){
         this.load()
