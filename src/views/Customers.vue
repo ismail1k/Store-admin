@@ -63,12 +63,7 @@
       <div class="form-group d-md-flex my-3">
         <div class="col-md-4"><label for="">Fullname: </label></div>
         <div class="col-12 col-md-8">
-          <input
-            type="text"
-            class="form-control"
-            value="ismail"
-            placeholder="fullname"
-          />
+          <input type="text" class="form-control" value="ismail" placeholder="fullname" />
         </div>
       </div>
       <div class="form-group d-md-flex my-3">
@@ -77,13 +72,15 @@
           <input type="text" class="form-control" value="exemple@email.com" placeholder="fullname"/>
         </div>
       </div>
-      <div>
-          <div class="col-md-4"><label for="">Email: </label></div>
-        <select class="form-select " aria-label="Default select example">
-          <option selected>Memeber</option>
-          <option class="text-success">Staff</option>
-          <option class="text-danger">Owner</option>
-        </select>
+      <div class="form-group d-md-flex my-3">
+            <div class="col-md-4"><label for="">Role: </label></div>
+            <div class="col-12 col-md-8">
+                <select class="form-select " aria-label="Default select example">
+                    <option selected>Memeber</option>
+                    <option class="text-success">Staff</option>
+                    <option class="text-danger">Owner</option>
+                </select>
+            </div>
       </div>
       <div class="fw-bolder mt-5">Give access to:</div>
       <div class="form-check form-switch mt-3">
