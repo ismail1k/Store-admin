@@ -74,7 +74,7 @@
       <div class="form-group d-md-flex my-3">
         <div class="col-md-4"><label for="">Email: </label></div>
         <div class="col-12 col-md-8">
-          <input type="text"class="form-control"value="exemple@email.com" placeholder="fullname"/>
+          <input type="text" class="form-control" value="exemple@email.com" placeholder="fullname"/>
         </div>
       </div>
       <div>
