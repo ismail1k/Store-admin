@@ -2,14 +2,15 @@
   <div class="container my-2">
     <table class="table">
       <tr>
-        <th>Name</th>
-        <th>Email</th>
+        <th>Account</th>
         <th>Role</th>
-        <th>Action</th>
+        <th width="150px">Action</th>
       </tr>
       <tr>
-        <td>Mark Gaberiya</td>
-        <td>Mark Gaberiya@gmail.com</td>
+        <td> 
+          <b>Mark Gaberiya</b><br>
+          <small><i>Mark&nbsp;Gaberiya@gmail.com</i></small>
+        </td>
         <td>
           <select class="form-control">
             <option value="" class="text-light bg-dark">Memeber</option>
@@ -53,8 +54,10 @@
         </td>
       </tr>
       <tr>
-        <td>Mark Gaberiya</td>
-        <td>Mark Gaberiya@gmail.com</td>
+        <td> 
+          <b>Mark Gaberiya</b><br>
+          <small><i>Mark&nbsp;Gaberiya@gmail.com</i></small>
+        </td>
         <td>
           <select class="form-control">
             <option value="" class="text-light bg-dark">Memeber</option>
@@ -102,10 +105,10 @@
       <button type="button" class="btn btn-outline-success">save..</button>
     </div>
     <div>
-    <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Full Name  :  Name </label></div>
+    <div class="form-group d-md-flex my-3">
+                <div class="col-md-4"><label for="">Fullname:  </label></div>
                 <div class="col-12 col-md-8">
-                    <input type="text" class="form-control" placeholder=" name...." />
+                    <input type="text" class="form-control" value="ismail" placeholder=" name...." />
                 </div>
             </div>
     </div>
