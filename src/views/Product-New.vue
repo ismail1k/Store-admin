@@ -7,16 +7,17 @@
                 <router-link to="/inventory" class="btn btn-outline-primary ml-2">Inventories</router-link>
             </div>
         </div>
-        <div>
+        <spinner v-if="loading"></spinner>
+        <div v-show="!loading">
             <div class="input-group mb-3">
                 <div class="col-md-4"><label for="">Images: </label></div>
                 <div class="col-12 col-md-8 d-flex px-0">
                     <div class="col-6">
-                        <input type="file" class="form-control"/>
+                        <input type="file" class="form-control" id="media_primary"/>
                         <small><i>Choose a primary image for the thumbnail.</i></small>
                     </div>
                     <div class="col-6">
-                        <input type="file" class="form-control" multiple/>
+                        <input type="file" class="form-control" id="media_secondary" multiple/>
                         <small><i>You can add more images if you have.</i></small>
                     </div>
                 </div>
@@ -93,16 +94,20 @@
     </div>
 </template>
 <script>
-// import axios from 'axios'
+import $ from 'jquery'
+import axios from 'axios'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { useToast } from "vue-toastification"
+import Spinner from '@/components/Spinner.vue'
 
 export default {
     data(){
         return {
+            loading: false,
             editor: ClassicEditor,
             editorConfig: {},
             product: {
+                id: null,
                 name: '',
                 tags: '',
                 short_description: '',
@@ -116,16 +121,44 @@ export default {
                     name: '',
                 },
                 inventory:{
+                    id: null,
                     name: '',
                     type: 1,
-                },
+                }
             },
         }
     },
     name: 'Product-New',
+    components: {
+        Spinner,
+    },
     methods: {
+        upload: async function(image, product_id, primary = false){
+            let request = new FormData();
+            request.append('attachment', image)
+            request.set('token', localStorage.getItem('token'))
+            request.set('product_id', product_id)
+            request.set('primary', primary == true?'1':'0')
+            
+            await axios.post(this.$api+'/media/new', request)
+            .then(function(response){
+                if(response.data.status == 200){
+                    return true
+                } else {
+                    return false
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+            return false
+        },
         validate: async function(){
             let product = this.product
+            if(!$('#media_primary').get(0).files.length){
+                this.$alert('Please a primary image!')
+                return false
+            }
             if(!product.name){
                 this.$alert('Please set a valid Product name!')
                 return false
@@ -134,52 +167,149 @@ export default {
                 this.$alert('Please set a valid Short description!')
                 return false
             }
-            if(product.price.original <= 0.5){
-                this.$alert('Original price!')
-                return false
-            }
             if(product.category.id == 0 && !product.category.name){
+                this.$alert('Please set category name!')
                 return false
             }
-            if(!product.inventory.type || !product.inventory.name){
+            if(!product.inventory.name){
+                this.$alert('Please set inventory name!')
                 return false
             }
-            return false
+            if(product.price.original <= 0.5){
+                this.$alert('Original price must be greater than 0.5!')
+                return false
+            }
+            if(product.price.discount < 0){
+                this.$alert('Discount price must be positive!')
+                return false
+            }
+            return true
         },
-        insertMedia: function(){
+        createInventory: async function(){
+            this.loading = true
+            let toast = useToast()
+            let self = this
+            axios.post(this.$api+'/inventory/new', {
+                token: localStorage.getItem('token'),
+                name: self.product.inventory.name,
+                type: self.product.inventory.type,
+            })
+            .then(function(response){
+                console.log(response.data)
+                if(response.data.status == 200){
+                    self.product.inventory.id = response.data.inventory_id
+                    self.loading = false
+                    return true
+                }
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+            })
+        },
+        createCategory: async function(){
+            this.loading = true
+            let toast = useToast()
+            let self = this
+            if(!this.product.category.id){
+                axios.post(this.$api+'/category/new',{
+                    token: localStorage.getItem('token'),
+                    category_name: self.product.category.name,
+                })
+                .then(function(response){
+                    console.log(response.data)
+                    if(response.data.status == 200){
+                        self.product.category.id = response.data.category_id
+                        self.loading = false
+                        return true
+                    }
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                })
+            }
+            return true
+        },
+        createProduct: async function(){
+            this.loading = true
+            let self = this
+            let product = this.product
+            let toast = useToast()
+            axios.post(this.$api+'/product/new', {
+                name: product.name,
+                short_description: product.short_description,
+                description: product.description,
+                tags: product.tags,
+                category_id: product.category.id,
+                inventory_id: product.inventory.id,
+                price: product.price.original,
+                discount: product.price.discount,
+            })
+            .then(function(response){
+                if(response.data.status == 200){
+                    self.product.id = response.data.product_id
+                    self.loading = false
+                    return true
+                }
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+            })
 
         },
-        createCategory: function(){
-
-        },
-        createInventory: function(){
-
-        },
-        createProduct: function(){
-
+        insertMedia: async function(){
+            let self = this
+            this.loading = true
+            for (let index = 0; index < $('#media_primary').get(0).files.length; index++) {
+                let image = $('#media_primary').get(0).files[index]
+                await self.upload(image, self.product.id, true)
+            }
+            for (let index = 0; index < $('#media_secondary').get(0).files.length; index++) {
+                let image = $('#media_secondary').get(0).files[index]
+                await self.upload(image, self.product.id, false)
+            }
+            this.loading = false
+            return true
+            
         },
         create: async function(){
             let toast = useToast()
             if(!await this.validate()){
-                toast.warning('Bad credentials!')
+                self.loading = false
                 return false
             }
-            if(!this.insertMedia()){
-                toast.warning('Cannot insert images!')
-                return false
-            }
-            if(!this.createCategory()){
+            if(!await this.createCategory()){
                 toast.warning('Cannot create category!')
+                self.loading = false
                 return false
             }
-            if(!this.createInventory()){
+            if(!await this.createInventory()){
                 toast.warning('Cannot create inventory!')
+                self.loading = false
                 return false
             }
-            if(!this.createInventory()){
+            if(!await this.createProduct()){
                 toast.warning('Cannot create product!')
+                self.loading = false
                 return false
             }
+            if(!await this.insertMedia()){
+                toast.warning('Cannot insert images!')
+                self.loading = false
+                return false
+            }
+            this.$alert('You have created a product!')
         },
     },
 }
