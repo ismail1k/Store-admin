@@ -51,7 +51,7 @@
                 <div class="col-md-4"><label for="">Category : </label></div>
                 <div class="col-md-8 d-flex justify-content-between">
                     <select class="form-select" v-model="product.category.id">
-                        <option value="null" selected disabled>Select Category</option>
+                        <option value="null" selected>Uncategoried</option>
                         <option value="1">Category 1</option>
                         <option value="2">Category 2</option>
                         <option value="3">Category 3</option>
@@ -135,23 +135,21 @@ export default {
     methods: {
         upload: async function(image, product_id, primary = false){
             let request = new FormData();
+            let ok = false
             request.append('attachment', image)
             request.set('token', localStorage.getItem('token'))
             request.set('product_id', product_id)
             request.set('primary', primary == true?'1':'0')
-            
             await axios.post(this.$api+'/media/new', request)
             .then(function(response){
                 if(response.data.status == 200){
-                    return true
-                } else {
-                    return false
+                    ok = true
                 }
             })
             .catch(function(error){
                 console.log(error)
             })
-            return false
+            return ok
         },
         validate: async function(){
             let product = this.product
@@ -185,46 +183,22 @@ export default {
             }
             return true
         },
-        createInventory: async function(){
-            this.loading = true
-            let toast = useToast()
-            let self = this
-            axios.post(this.$api+'/inventory/new', {
-                token: localStorage.getItem('token'),
-                name: self.product.inventory.name,
-                type: self.product.inventory.type,
-            })
-            .then(function(response){
-                console.log(response.data)
-                if(response.data.status == 200){
-                    self.product.inventory.id = response.data.inventory_id
-                    self.loading = false
-                    return true
-                }
-            })
-            .catch(function(error){
-                toast.error('Error!')
-                console.log(error)
-            })
-            .finally(function(){
-                self.loading = false
-            })
-        },
         createCategory: async function(){
             this.loading = true
             let toast = useToast()
             let self = this
-            if(!this.product.category.id){
-                axios.post(this.$api+'/category/new',{
+            let ok = false
+            if(this.product.category.id == 0){
+                await axios.post(this.$api+'/category/new', {
                     token: localStorage.getItem('token'),
                     category_name: self.product.category.name,
                 })
                 .then(function(response){
-                    console.log(response.data)
                     if(response.data.status == 200){
+                        console.log(response.data)
                         self.product.category.id = response.data.category_id
                         self.loading = false
-                        return true
+                        ok = true
                     }
                 })
                 .catch(function(error){
@@ -235,14 +209,49 @@ export default {
                     self.loading = false
                 })
             }
-            return true
+            if((this.product.category.id == null) || (this.product.category.id == 'null')){
+                this.product.category.id = 0
+                ok = true
+            }
+            if(this.product.category.id > 0){
+                ok = true
+            }
+            return ok
+        },
+        createInventory: async function(){
+            this.loading = true
+            let toast = useToast()
+            let self = this
+            let ok = false
+            await axios.post(this.$api+'/inventory/new', {
+                token: localStorage.getItem('token'),
+                name: self.product.inventory.name,
+                type: self.product.inventory.type,
+            })
+            .then(function(response){
+                if(response.data.status == 200){
+                    self.product.inventory.id = response.data.inventory_id
+                    self.loading = false
+                    ok = true
+                }
+            })
+            .catch(function(error){
+                toast.error('Error!')
+                console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
+            })
+            return ok
         },
         createProduct: async function(){
             this.loading = true
             let self = this
             let product = this.product
             let toast = useToast()
-            axios.post(this.$api+'/product/new', {
+            let ok = false
+            await axios.post(this.$api+'/product/new', {
+                token: localStorage.getItem('token'),
                 name: product.name,
                 short_description: product.short_description,
                 description: product.description,
@@ -256,7 +265,7 @@ export default {
                 if(response.data.status == 200){
                     self.product.id = response.data.product_id
                     self.loading = false
-                    return true
+                    ok = true
                 }
             })
             .catch(function(error){
@@ -266,7 +275,7 @@ export default {
             .finally(function(){
                 self.loading = false
             })
-
+            return ok
         },
         insertMedia: async function(){
             let self = this
@@ -285,6 +294,7 @@ export default {
         },
         create: async function(){
             let toast = useToast()
+            let self = this
             if(!await this.validate()){
                 self.loading = false
                 return false
@@ -312,5 +322,8 @@ export default {
             this.$alert('You have created a product!')
         },
     },
+    mounted(){
+        
+    }
 }
 </script>
