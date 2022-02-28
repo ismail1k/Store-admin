@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex">
-        <div class="col-6 col-md-3 ">
+        <div class="col-6 col-md-3 p-0">
             <div class="card border-light shadow my-2 bg-body rounded mx-2 p-0">
                 <div class=" font-monospace ml-3"> <b>Costumers</b> </div>
                 <div class="card-body">
@@ -9,7 +9,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6 col-md-3 ">
+        <div class="col-6 col-md-3 p-0">
             <div class="card border-light shadow my-2 bg-body rounded mx-2 p-0">
                 <div class=" font-monospace ml-3"> <b>Costumers</b> </div>
                 <div class="card-body">
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6 col-md-3 ">
+        <div class="col-6 col-md-3 p-0">
             <div class="card border-light shadow my-2 bg-body rounded mx-2 p-0">
                 <div class=" font-monospace ml-3"> <b>Costumers</b> </div>
                 <div class="card-body">
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-6 col-md-3 ">
+        <div class="col-6 col-md-3 p-0">
             <div class="card border-light shadow my-2 bg-body rounded mx-2 p-0">
                 <div class=" font-monospace ml-3"> <b>Costumers</b> </div>
                 <div class="card-body">
@@ -37,10 +37,10 @@
             </div>
         </div>
     </div>
-    <div class="d-flex">
-        <div class="col-6 row">
-            <div class="col-6 col-md-6">
-                <div class="card m-2">
+    <div class="">
+        <div class="d-flex justify-content-start p-0">
+            <div class="col-3">
+                <div class="card my-2">
                     <div class="card-body">
                         <h5 class="card-title opacity-75">Orders</h5>
                         <p class="card-text fs-3">15,450$</p>
@@ -48,8 +48,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-6">
-                <div class="card m-2">
+            <div class="col-3 p-0">
+                <div class="card my-2">
                     <div class="card-body">
                         <h5 class="card-title opacity-75">Orders</h5>
                         <p class="card-text fs-3">15,450$</p>
@@ -57,8 +57,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-6">
-                <div class="card m-2">
+        </div>
+        <div class="d-flex justify-content-start p-0">
+            <div class="col-3">
+                <div class="card my-2">
                     <div class="card-body">
                         <h5 class="card-title opacity-75">Orders</h5>
                         <p class="card-text fs-3">15,450$</p>
@@ -66,8 +68,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-6">
-                <div class="card m-2">
+            <div class="col-3 p-0">
+                <div class="card my-2">
                     <div class="card-body">
                         <h5 class="card-title opacity-75">Orders</h5>
                         <p class="card-text fs-3">15,450$</p>
