@@ -5,7 +5,6 @@ import axios from 'axios'
 import jQuery from 'jquery'
 import router from './router'
 import Toast, { POSITION } from "vue-toastification"
-import CKEditor from '@ckeditor/ckeditor5-vue'
 import VueSimpleAlert from "vue3-simple-alert-next"
 import "vue-toastification/dist/index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -53,4 +52,4 @@ const ToastOptions = {
     containerClassName: "px-2"
 }
 window.$ = jQuery;
-app.use(router).use(store).use(Toast, ToastOptions).use(CKEditor).use(VueSimpleAlert, { reverseButtons: true }).mount('#app')
+app.use(router).use(store).use(Toast, ToastOptions).use(VueSimpleAlert, { reverseButtons: true }).mount('#app')

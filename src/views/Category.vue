@@ -62,7 +62,7 @@ export default {
             })
         },
         remove: function(id){
-            this.$confirm("Are you sure you want to remove category?")
+            this.$confirm("Are you sure you want to remove category?<br>Any product linked to this category will be uncategoried.")
             .then(() => {
                 const toast = useToast()
                 let self = this

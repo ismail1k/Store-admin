@@ -26,6 +26,7 @@
                 <div class="col-md-4"><label for="">Product Name: </label></div>
                 <div class="col-12 col-md-8">
                     <input type="text" v-model="product.name" class="form-control" placeholder="Product name" />
+                    <small class="text-danger" v-if="product.name.includes('/')"><i>The product name must not contain slash .</i></small>
                 </div>
             </div>
             <div class="form-group d-md-flex">
@@ -44,7 +45,7 @@
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Description : </label></div>
                 <div class="col-12 col-md-8">
-                    <ckeditor class="border" @input="$emit('input',String(this.content))" v-model="product.description" :editor="editor" :config="editorConfig"></ckeditor>
+                    <textarea type="text" v-model="product.description" class="form-control" placeholder="Full Description" />
                 </div>
             </div>
             <div class="form-group d-md-flex">
@@ -96,7 +97,6 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { useToast } from "vue-toastification"
 import Spinner from '@/components/Spinner.vue'
 
@@ -104,50 +104,12 @@ export default {
     data(){
         return {
             loading: false,
-            editor: ClassicEditor,
-            editorConfig: {
-                items: [
-                    'heading',
-                    '|',
-                    'fontSize',
-                    'fontFamily',
-                    'fontColor',
-                    'fontBackgroundColor',
-                    'imageInsert',
-                    '|',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikethrough',
-                    'highlight',
-                    'removeFormat',
-                    '|',
-                    'alignment',
-                    '|',
-                    'numberedList',
-                    'bulletedList',
-                    '|',
-                    'indent',
-                    'outdent',
-                    '|',
-                    'todoList',
-                    'link',
-                    'blockQuote',
-                    'imageUpload',
-                    'insertTable',
-                    'mediaEmbed',
-                    '|',
-                    'undo',
-                    'redo',
-                    'CKFinder'
-                    ]
-            },
             product: {
                 id: null,
                 name: '',
                 tags: '',
                 short_description: '',
-                description: "fsefsf",
+                description: '',
                 price: {
                     original: 0.01,
                     discount: 0,
@@ -189,12 +151,12 @@ export default {
         },
         validate: async function(){
             let product = this.product
-            if(!$('#media_primary').get(0).files.length){
-                this.$alert('Please a primary image!')
-                return false
-            }
             if(!product.name){
                 this.$alert('Please set a valid Product name!')
+                return false
+            }
+            if(product.name.includes('/')){
+                this.$alert('The product name must not contain / !')
                 return false
             }
             if(!product.short_description){
@@ -215,6 +177,10 @@ export default {
             }
             if(product.price.discount < 0){
                 this.$alert('Discount price must be positive!')
+                return false
+            }
+            if(!$('#media_primary').get(0).files.length){
+                this.$alert('Please a primary image!')
                 return false
             }
             return true
@@ -359,7 +325,6 @@ export default {
         },
     },
     mounted(){
-
     }
 }
 </script>
