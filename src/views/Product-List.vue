@@ -1,7 +1,8 @@
 <template>
     <div class="container my-2">
         <div class="card-header d-flex justify-content-end my-2">
-            <router-link to="/product/create" class="btn btn-outline-primary">Create Product</router-link>
+            <router-link to="/inventory" class="btn btn-outline-primary ml-2">Inventory</router-link>
+            <router-link to="/product/create" class="btn btn-outline-primary ml-2">Create Product</router-link>
         </div>
         <spinner v-if="loading"></spinner>
         <div v-if="!loading">

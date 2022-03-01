@@ -44,7 +44,7 @@
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Description : </label></div>
                 <div class="col-12 col-md-8">
-                    <ckeditor class="border" v-model="product.description" :editor="editor" :config="editorConfig"></ckeditor>
+                    <ckeditor class="border" @input="$emit('input',String(this.content))" v-model="product.description" :editor="editor" :config="editorConfig"></ckeditor>
                 </div>
             </div>
             <div class="form-group d-md-flex">
@@ -105,13 +105,49 @@ export default {
         return {
             loading: false,
             editor: ClassicEditor,
-            editorConfig: {},
+            editorConfig: {
+                items: [
+                    'heading',
+                    '|',
+                    'fontSize',
+                    'fontFamily',
+                    'fontColor',
+                    'fontBackgroundColor',
+                    'imageInsert',
+                    '|',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'strikethrough',
+                    'highlight',
+                    'removeFormat',
+                    '|',
+                    'alignment',
+                    '|',
+                    'numberedList',
+                    'bulletedList',
+                    '|',
+                    'indent',
+                    'outdent',
+                    '|',
+                    'todoList',
+                    'link',
+                    'blockQuote',
+                    'imageUpload',
+                    'insertTable',
+                    'mediaEmbed',
+                    '|',
+                    'undo',
+                    'redo',
+                    'CKFinder'
+                    ]
+            },
             product: {
                 id: null,
                 name: '',
                 tags: '',
                 short_description: '',
-                description: '',
+                description: "fsefsf",
                 price: {
                     original: 0.01,
                     discount: 0,
@@ -323,7 +359,7 @@ export default {
         },
     },
     mounted(){
-        
+
     }
 }
 </script>

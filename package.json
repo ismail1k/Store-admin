@@ -14,6 +14,7 @@
     "@ckeditor/ckeditor5-build-balloon-block": "^32.0.0",
     "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "@ckeditor/ckeditor5-essentials": "^32.0.0",
+    "@ckeditor/ckeditor5-heading": "^32.0.0",
     "@ckeditor/ckeditor5-image": "^32.0.0",
     "@ckeditor/ckeditor5-ui": "^32.0.0",
     "@ckeditor/ckeditor5-upload": "^32.0.0",

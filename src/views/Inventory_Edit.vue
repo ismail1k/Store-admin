@@ -7,7 +7,7 @@
         <div class="cart-body" v-else>
             <div class="d-flex my-1">
                 <div class="col-4"><span>Inventory Name: </span> </div>
-                <div class="col-8"><input type="text" v-model="inventory.name" class="form-control"></div>
+                <div class="col-8"><input type="text" v-model="inventory.name" onfocus="this.select()" class="form-control"></div>
             </div>
             <div class="d-flex my-1">
                 <div class="col-4"><span>Quantity (<span>
@@ -16,7 +16,7 @@
                 </span>): </span> </div>
                 <div class="col-8">
                     <div class="input-group">
-                        <input type="text" class="form-control" v-model="inventory.quantity" placeholder="Set the quantity you want to add." :disabled="inventory.digital">
+                        <input type="text" class="form-control" v-model="inventory.quantity" onfocus="this.select()" placeholder="Set the quantity you want to add." :disabled="inventory.digital">
                         <span class="input-group-text" id="basic-addon2">item</span>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <td>--</td>
                         <td>
                             <div class="p-1">
-                                <input type="text" v-model="newItemKey" class="form-control form-control-sm" placeholder="Add new item">
+                                <input type="text" v-model="newItemKey" onfocus="this.select()" class="form-control form-control-sm" placeholder="Add new item">
                             </div>
                         </td>
                         <td align="center">
@@ -122,7 +122,6 @@ export default {
                 if(response.data.status == 500){
                     toast.warning('Item already exist!')
                 }
-                console.log(response.data)
             })
             .catch(function(error){
                 toast.error('Error!')
@@ -138,14 +137,12 @@ export default {
                 let toast = useToast()
                 let self = this
                 this.loading = true
-                console.log(sku_id)
                 axios.post(this.$api+'/inventory/descrement', {
                     sku_id: sku_id,
                     token: localStorage.getItem('token'),
                 })
-                .then(function(response){
+                .then(function(){
                     self.load()
-                    console.log(response.data)
                 })
                 .catch(function(error){
                     toast.error('Error!')
