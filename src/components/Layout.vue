@@ -15,9 +15,9 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav" v-if="menu.length">
                             <div class="sb-sidenav-menu-heading">Management</div>
-                            <router-link v-for="m in menu" :key="m" class="nav-link" onclick="this.classList.add('active')" :to="'/'+m.url">
+                            <router-link v-for="m in menu" :key="m" class="nav-link" :to="'/'+m.url">
                                 <div class="sb-nav-link-icon"><i :class="'fas fa-'+m.icon"></i></div>
-                                {{m.name}}
+                                <span>{{m.name}}</span>
                             </router-link>
                         </div>
                     </div>
@@ -172,9 +172,28 @@ export default {
             e.preventDefault()
             $("body").toggleClass("sb-sidenav-toggled")
         })
+        
+        $("a").each(function() {
+            if (this.href === window.location.href) {
+                $(this).addClass("active")
+            }
+        })
         let interval = setInterval(async function(){
             await self.loadUser(interval)
         }, 10000)
     },
 }
 </script>
+<style scoped>
+.router-link-active{
+    transition: all 0.1s linear;
+    -webkit-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    -o-transition: all 0.1s linear;
+    border-left: solid 3px #007bff;
+}
+.router-link-active *{
+    transition: all 0.1s linear;
+    color:rgb(255, 255, 255);
+}
+</style>
