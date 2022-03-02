@@ -48,7 +48,7 @@ const routes = [
         },
     },
     {
-        path: '/product/:id/view',
+        path: '/product/:product_id/view',
         name: 'ProductView',
         component: ProductView,
         meta: {

@@ -53,9 +53,7 @@
                 <div class="col-md-8 d-flex justify-content-between">
                     <select class="form-select" v-model="product.category.id">
                         <option value="null" selected>Uncategoried</option>
-                        <option value="1">Category 1</option>
-                        <option value="2">Category 2</option>
-                        <option value="3">Category 3</option>
+                        <option v-for="category in categories" :key="category" :value="category.id"><span v-text="category.name"></span> (Has <span v-text="category.product"></span> products)</option>
                         <option value="0">New Category</option>
                     </select>
                     <input v-if="product.category.id == 0" v-model="product.category.name" type="text" class="col-9 form-control ml-2" placeholder="Category name">
@@ -124,6 +122,7 @@ export default {
                     type: 1,
                 }
             },
+            categories: [],
         }
     },
     name: 'Product-New',
@@ -197,7 +196,6 @@ export default {
                 })
                 .then(function(response){
                     if(response.data.status == 200){
-                        console.log(response.data)
                         self.product.category.id = response.data.category_id
                         self.loading = false
                         ok = true
@@ -324,7 +322,17 @@ export default {
             this.$alert('You have created a product!')
         },
     },
-    mounted(){
+    created(){
+        let self = this
+        let toast = useToast()
+        axios.get(this.$api+'/category')
+        .then(function(response){
+            self.categories = response.data
+        })
+        .catch(function(error){
+            console.log(error)
+            toast.error('Cannot load Categories!')
+        })
     }
 }
 </script>
