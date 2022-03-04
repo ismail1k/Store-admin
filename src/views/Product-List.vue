@@ -21,7 +21,7 @@
                         <span v-if="product.inventory.digital"><small><i>(Digital)</i></small></span><br>
                         <i class="d-none d-md-block py-0"><small v-text="product.short_description.substring(0, 180)"></small>...</i>
                     </td>
-                    <td><span v-text="product.inventory.quantity"></span>Item</td>
+                    <td><span v-text="product.inventory.quantity + ' Item'"></span></td>
                     <td><span v-text="product.price-product.discount"></span>{{$store.state.currency}}</td>
                     <td>
                         <a class="btn text-danger py-0 mx-1" @click="remove(product.id)"><i class="fa-solid fa-trash-can"></i></a>
@@ -69,10 +69,31 @@ export default {
                 self.loading = false
             })
         },
-        remove: function(){
+        remove: function(product_id){
+            let toast = useToast()
+            let self = this
             this.$confirm("Are you sure you want to remove product?")
             .then(() => {
-                console.log('remove')
+                self.loading = true
+                axios.get(self.$api+'/product/remove', {
+                    params: {
+                        token: localStorage.getItem('token'),
+                        product_id: product_id,
+                    },
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        self.$alert('Product was removed!')
+                    }
+                })
+                .catch(function(error){
+                    console.log(error)
+                    toast.error('Error!')
+                })
+                .finally(function(){
+                    self.loading = false
+                    self.load()
+                })
             })
             
         }
