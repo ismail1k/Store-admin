@@ -16,7 +16,7 @@
                         <div class="nav" v-if="menu.length">
                             <div class="sb-sidenav-menu-heading">Management</div>
                             <router-link v-for="m in menu" :key="m" class="nav-link" :to="'/'+m.url">
-                                <div class="sb-nav-link-icon"><i :class="'fas fa-'+m.icon"></i></div>
+                                <div class="sb-nav-link-icon" style="width:20px;"><i :class="'fas fa-'+m.icon"></i></div>
                                 <span>{{m.name}}</span>
                             </router-link>
                         </div>
