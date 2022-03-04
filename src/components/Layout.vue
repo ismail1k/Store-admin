@@ -187,6 +187,7 @@ export default {
 <style>
 .router-link-active{
     transition: all 0.1s linear;
+    background-color: rgba(255, 255, 255, 0.082);
     -webkit-transition: all 0.1s linear;
     -moz-transition: all 0.1s linear;
     -o-transition: all 0.1s linear;

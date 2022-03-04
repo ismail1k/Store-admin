@@ -13,7 +13,7 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Products</th>
-                    <th>Action</th>
+                    <th width="120px">Action</th>
                 </tr>
                 <tr class="border-0" v-for="(category, index) in categories" :key="(category, index)">
                     <td><span v-text="index+1"></span></td>
