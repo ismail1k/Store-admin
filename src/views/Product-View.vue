@@ -9,7 +9,7 @@
         <Spinner v-if="loading" class="my-5"></Spinner>
         <div v-show="!loading && product">
             <div class="alert alert-warning mx-3 mt-3" v-if="!product.availability">
-                <span>This product is not available for all customers! <a href="javascript:void(0)" @click="product.availability = true">click here</a> to make it availabe to all.</span>
+                <span>This product is not available for all customers! <a href="javascript:void(0)" @click="show()">click here</a> to make it availabe to all.</span>
             </div>
             <div class="input-group mb-3">
                 <div class="col-md-4"><label for="">Images: </label></div>
@@ -428,7 +428,7 @@ export default {
                 })
                 .then(function(response){
                     if(response.data.status == 200){
-                        self.$alert('Now product is unavailable to all!<br> You can change it at any time to available.')
+                        self.$alert('Product now is unavailable to all!<br> You can change it at any time to available.')
                     }
                 })
                 .catch(function(error){
@@ -439,6 +439,29 @@ export default {
                     self.loading = false
                     self.load()
                 })
+            })
+        },
+        show: async function(){
+            let self = this
+            let toast = useToast()
+            self.loading = true
+            axios.post(this.$api+'/product/edit', {
+                token: localStorage.getItem('token'),
+                product_id: self.product.id,
+                available: true,
+            })
+            .then(function(response){
+                if(response.data.status == 200){
+                    self.$alert('Product now is available to all!')
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+                toast.error('Error!')
+            })
+            .finally(function(){
+                self.loading = false
+                self.load()
             })
         },
         save: async function(){
