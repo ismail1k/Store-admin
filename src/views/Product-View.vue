@@ -2,23 +2,28 @@
     <div class="container my-2">
         <div class="card-header d-flex justify-content-between align-items-center my-2">
             <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
+            <div class="d-flex justify-content-end">
+                <a v-if="product.availability" href="javascript:void(0)" class="btn btn-outline-danger ml-2" @click="hide()">Hide Product</a>
+            </div>
         </div>
         <Spinner v-if="loading" class="my-5"></Spinner>
-        <div v-if="!loading && product">
+        <div v-show="!loading && product">
             <div class="alert alert-warning mx-3 mt-3" v-if="!product.availability">
                 <span>This product is not available for all customers! <a href="javascript:void(0)" @click="product.availability = true">click here</a> to make it availabe to all.</span>
             </div>
             <div class="input-group mb-3">
                 <div class="col-md-4"><label for="">Images: </label></div>
                 <div class="col-12 col-md-8">
-                    <div class="d-flex">
-                        <div class="col-6 mb-2">
-                            <img :src="$base_url+product.media.primary.path" class="img-thumbnail rounded ">
+                    <div class="d-flex mb-2">
+                        <div class="col-6">
+                            <img v-if="product.media.primary" :src="$base_url+product.media.primary.path" class="img-thumbnail rounded ">
                         </div>
-                        <div class="col-6 overflow-auto mb-2 row">
-                            <div class="col-4 position-relative d-flex justify-content-center" v-for="media in product.media.attachment" :key="media">
-                                <img :src="$base_url+media.path" class="rounded position-absolute w-100">
-                                <button class="btn btn-sm btn-danger py-0 position-absolute top-0 end-0 m-1" @click="removeMedia(media)"><i class="fas fa-times"></i></button>
+                        <div class="col-6 overflow-auto mx-md-3 px-0 row" style="max-height:250px;">
+                            <div class="col-4 position-relative d-flex justify-content-between p-0" v-for="media in product.media.attachment" :key="media">
+                                <span>
+                                    <img :src="$base_url+media.path" class="rounded position-relative w-100 px-1 py-2">
+                                    <button class="btn btn-sm btn-danger py-0 position-absolute top-0 end-0 m-1" @click="removeMedia(media)"><i class="fas fa-times"></i></button>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -74,11 +79,15 @@
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Inventory : </label></div>
                 <div class="col-md-8 d-flex justify-content-between">
-                    <select class="form-select" v-model="product.inventory.type">
+                    <select v-if="product.inventory.id" class="form-select mr-2" v-model="product.inventory.id">
+                        <option v-for="inventory in inventories" :key="inventory" :value="inventory.id" selected>{{inventory.name}}</option>
+                        <option value="0" selected>New Inventory</option>
+                    </select>
+                    <select v-if="product.inventory.id == 0" class="col-2 form-select" v-model="product.inventory.type">
                         <option value="1" selected>Physical</option>
                         <option value="2">Digital</option>
                     </select>
-                    <input type="text" v-model="product.inventory.name" class="col-9 form-control ml-2" placeholder="Inventory name"/>
+                    <input v-if="product.inventory.id == 0" type="text" v-model="product.inventory.name" class="col-6 form-control ml-2" placeholder="Inventory name"/>
                 </div>
             </div>
             <div class="form-group d-md-flex">
@@ -108,16 +117,41 @@
     </div>
 </template>
 <script>
+import $ from 'jquery'
 import axios from 'axios'
-import Spinner from '@/components/Spinner.vue'
 import { useToast } from "vue-toastification"
+import Spinner from '@/components/Spinner.vue'
 
 export default {
     data(){
         return {
             loading: false,
-            product: false,
+            product: {
+                id: null,
+                name: '',
+                tags: '',
+                short_description: '',
+                description: '',
+                price: {
+                    original: 0.01,
+                    discount: 0,
+                },
+                category: {
+                    id: null,
+                    name: '',
+                },
+                inventory:{
+                    id: null,
+                    name: '',
+                    type: 1,
+                },
+                media:{
+                    primary: false,
+                    attachment: [],
+                }
+            },
             categories: [],
+            inventories: [],
         }
     },
     name: 'Product-View',
@@ -125,10 +159,26 @@ export default {
         Spinner,
     },
     methods: {
-        load: function(){
+        load: async function(){
             this.loading = true
             let self = this
             let toast = useToast()
+            await axios.get(this.$api+'/category')
+            .then(function(response){
+                self.categories = response.data
+            })
+            .catch(function(error){
+                console.log(error)
+                toast.error('Cannot load Categories!')
+            })
+            await axios.get(this.$api+'/inventory')
+            .then(function(response){
+                self.inventories = response.data
+            })
+            .catch(function(error){
+                console.log(error)
+                toast.error('Cannot load Inventories!')
+            })
             axios.get(this.$api+'/product/view', {
                 params: {
                     token: localStorage.getItem('token'),
@@ -137,13 +187,15 @@ export default {
             })
             .then(function(response){
                 if(response.data.status == 404){
+                    self.product = false
                     toast.warning('No product found!')
                 } else {
                     self.product = response.data
                 }
                 self.product = {
+                    id: response.data.id,
                     name: response.data.name,
-                    tags: response.data.tags,
+                    tags: response.data.tags.toString(),
                     short_description: response.data.short_description,
                     description: response.data.description,
                     availability: response.data.availability,
@@ -151,8 +203,9 @@ export default {
                         id: response.data.category?response.data.category.id:null,
                     },
                     inventory: {
-                        type: response.data.inventory.digital?2:1,
-                        name: response.data.inventory.name,
+                        id: response.data.inventory.id,
+                        type: 1,
+                        name: '',
                     },
                     price: {
                         original: response.data.price,
@@ -164,7 +217,6 @@ export default {
                     },
 
                 }
-                console.log(response.data)
             })
             .catch(function(error){
                 toast.error('Error!')
@@ -174,8 +226,57 @@ export default {
                 self.loading = false
             })
         },
+        validate: async function(){
+            let product = this.product
+            if(!product.name){
+                this.$alert('Please set a valid Product name!')
+                return false
+            }
+            if(product.name.includes('/')){
+                this.$alert('The product name must not contain / !')
+                return false
+            }
+            if(!product.short_description){
+                this.$alert('Please set a valid Short description!')
+                return false
+            }
+            if(product.category.id == 0 && !product.category.name){
+                this.$alert('Please set category name!')
+                return false
+            }
+            if(product.inventory.id == 0 && !product.inventory.name){
+                this.$alert('Please set inventory name!')
+                return false
+            }
+            if(product.price.original <= 0.5){
+                this.$alert('Original price must be greater than 0.5!')
+                return false
+            }
+            if(product.price.discount < 0){
+                this.$alert('Discount price must be positive!')
+                return false
+            }
+            return true
+        },
+        upload: async function(image, product_id, primary = false){
+            let ok = false
+            let request = new FormData();
+            request.set('attachment', image)
+            request.set('token', localStorage.getItem('token'))
+            request.set('product_id', product_id)
+            request.set('primary', primary == true?'1':'0')
+            await axios.post(this.$api+'/media/new', request)
+            .then(function(response){
+                if(response.data.status == 200){
+                    ok = true
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+            return ok
+        },
         removeMedia: function(media){
-            console.log(media)
             let self = this
             let toast = useToast()
             axios.get(this.$api+'/media/remove', {
@@ -198,58 +299,146 @@ export default {
                 console.log(error)
             })
         },
-        upload: async function(image, product_id, primary = false){
-            let request = new FormData();
+        updateMedia: async function(){
+            let self = this
+            this.loading = true
+            for(let index = 0; index < $('#media_primary').get(0).files.length; index++){
+                await self.upload($('#media_primary').get(0).files[index], self.product.id, true)
+            }
+            for(let index = 0; index < $('#media_secondary').get(0).files.length; index++){
+                await self.upload($('#media_secondary').get(0).files[index], self.product.id, false)
+            }
+            this.loading = false
+            return true
+        },
+        updateCategory: async function(){
+            this.loading = true
+            let toast = useToast()
+            let self = this
             let ok = false
-            request.append('attachment', image)
-            request.set('token', localStorage.getItem('token'))
-            request.set('product_id', product_id)
-            request.set('primary', primary == true?'1':'0')
-            await axios.post(this.$api+'/media/new', request)
+            if(this.product.category.id == 0){
+                await axios.post(this.$api+'/category/new', {
+                    token: localStorage.getItem('token'),
+                    category_name: self.product.category.name,
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        self.product.category.id = response.data.category_id
+                        self.loading = false
+                        ok = true
+                    }
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                })
+            }
+            if((this.product.category.id == null) || (this.product.category.id == 'null')){
+                this.product.category.id = 0
+                ok = true
+            }
+            if(this.product.category.id > 0){
+                ok = true
+            }
+            return ok
+        },
+        updateInventory: async function(){
+            this.loading = true
+            let toast = useToast()
+            let self = this
+            let ok = false
+            if(this.product.inventory.id == 0){
+                await axios.post(this.$api+'/inventory/new', {
+                    token: localStorage.getItem('token'),
+                    name: self.product.inventory.name,
+                    type: self.product.inventory.type,
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        self.product.inventory.id = response.data.inventory_id
+                        self.loading = false
+                        ok = true
+                    }
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                })
+            }
+            if((this.product.inventory.id == null) || (this.product.inventory.id == 'null')){
+                this.product.inventory.id = 0
+                ok = true
+            }
+            if(this.product.inventory.id > 0){
+                ok = true
+            }
+            return ok
+        },
+        updateProduct: async function(){
+            this.loading = true
+            let self = this
+            let product = this.product
+            let toast = useToast()
+            let ok = false
+            await axios.post(this.$api+'/product/edit', {
+                token: localStorage.getItem('token'),
+                product_id: product.id,
+                name: product.name,
+                short_description: product.short_description,
+                description: product.description,
+                tags: product.tags,
+                category_id: product.category.id,
+                inventory_id: product.inventory.id,
+                price: product.price.original,
+                discount: product.price.discount,
+                available: product.availability,
+            })
             .then(function(response){
                 if(response.data.status == 200){
+                    self.product.id = response.data.product_id
+                    self.loading = false
                     ok = true
                 }
             })
             .catch(function(error){
+                toast.error('Error!')
                 console.log(error)
+            })
+            .finally(function(){
+                self.loading = false
             })
             return ok
         },
-        validate: async function(){
-            let product = this.product
-            if(!product.name){
-                this.$alert('Please set a valid Product name!')
-                return false
-            }
-            if(product.name.includes('/')){
-                this.$alert('The product name must not contain / !')
-                return false
-            }
-            if(!product.short_description){
-                this.$alert('Please set a valid Short description!')
-                return false
-            }
-            if(product.category.id == 0 && !product.category.name){
-                this.$alert('Please set category name!')
-                return false
-            }
-            if(!product.inventory.name){
-                this.$alert('Please set inventory name!')
-                return false
-            }
-            if(product.price.original <= 0.5){
-                this.$alert('Original price must be greater than 0.5!')
-                return false
-            }
-            if(product.price.discount < 0){
-                this.$alert('Discount price must be positive!')
-                return false
-            }
-            return true
-        },
-        updateMedia: async function(){
-
+        hide: async function(){
+            let self = this
+            let toast = useToast()
+            this.$confirm("Are you sure you want to hide this product from store?<br>Product will be unavailable to all.")
+            .then(() => {
+                self.loading = true
+                axios.post(this.$api+'/product/edit', {
+                    token: localStorage.getItem('token'),
+                    product_id: self.product.id,
+                    available: false,
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        self.$alert('Now product is unavailable to all!<br> You can change it at any time to available.')
+                    }
+                })
+                .catch(function(error){
+                    console.log(error)
+                    toast.error('Error!')
+                })
+                .finally(function(){
+                    self.loading = false
+                })
+            })
         },
         save: async function(){
             let toast = useToast()
@@ -259,25 +448,31 @@ export default {
                 return false
             }
             if(!await this.updateMedia()){
-                toast.warning('Cannot insert images!')
+                toast.warning('Cannot Update images!')
                 self.loading = false
                 return false
             }
-            this.$alert('You have updated a product!')
+            if(!await this.updateCategory()){
+                toast.warning('Cannot Update Category!')
+                self.loading = false
+                return false
+            }
+            if(!await this.updateInventory()){
+                toast.warning('Cannot Update Inventory!')
+                self.loading = false
+                return false
+            }
+            if(!await this.updateProduct()){
+                toast.warning('Cannot Update Product!')
+                self.loading = false
+                return false
+            }
+            await self.load()
+            this.$alert('Product updated!')
         },
     },
     created(){
         this.load()
-        let self = this
-        let toast = useToast()
-        axios.get(this.$api+'/category')
-        .then(function(response){
-            self.categories = response.data
-        })
-        .catch(function(error){
-            console.log(error)
-            toast.error('Cannot load Categories!')
-        })
     }
 }
 </script>

@@ -184,7 +184,7 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style>
 .router-link-active{
     transition: all 0.1s linear;
     -webkit-transition: all 0.1s linear;
@@ -195,5 +195,18 @@ export default {
 .router-link-active *{
     transition: all 0.1s linear;
     color:rgb(255, 255, 255);
+}
+::-webkit-scrollbar {
+    overflow: hidden;
+    width: 7px;
+    height: 6px;
+    margin:5px;
+}
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgb(160, 160, 160);
+    border-radius: 3px;
 }
 </style>
