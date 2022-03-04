@@ -79,7 +79,7 @@
             <div class="form-group d-md-flex">
                 <div class="col-md-4"><label for="">Inventory : </label></div>
                 <div class="col-md-8 d-flex justify-content-between">
-                    <select v-if="product.inventory.id" class="form-select mr-2" v-model="product.inventory.id">
+                    <select class="form-select mr-2" v-model="product.inventory.id">
                         <option v-for="inventory in inventories" :key="inventory" :value="inventory.id" selected>{{inventory.name}}</option>
                         <option value="0" selected>New Inventory</option>
                     </select>
@@ -203,7 +203,7 @@ export default {
                         id: response.data.category?response.data.category.id:null,
                     },
                     inventory: {
-                        id: response.data.inventory.id,
+                        id: response.data.inventory.id?response.data.inventory.id:0,
                         type: 1,
                         name: '',
                     },
@@ -393,7 +393,7 @@ export default {
                 short_description: product.short_description,
                 description: product.description,
                 tags: product.tags,
-                category_id: product.category.id,
+                category_id: product.category.id?product.category.id:null,
                 inventory_id: product.inventory.id,
                 price: product.price.original,
                 discount: product.price.discount,
@@ -437,6 +437,7 @@ export default {
                 })
                 .finally(function(){
                     self.loading = false
+                    self.load()
                 })
             })
         },
