@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 //Routes
 import Dashboard from '@/views/Dashboard.vue'
 import Category from '@/views/Category.vue'
+import Order from '@/views/Order.vue'
 import ProductList from '@/views/Product-List.vue'
 import ProductNew from '@/views/Product-New.vue'
 import ProductView from '@/views/Product-View.vue'
@@ -27,6 +28,14 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: Dashboard,
+        meta: {
+            layout: true,
+        },
+    },
+    {
+        path: '/order',
+        name: 'Order',
+        component: Order,
         meta: {
             layout: true,
         },
