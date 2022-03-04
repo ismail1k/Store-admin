@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { RouterView, createRouter, createWebHistory } from 'vue-router'
 
 //Routes
 import Dashboard from '@/views/Dashboard.vue'
@@ -17,7 +17,6 @@ import C404 from '@/views/C404.vue'
 
 //Auth Path
 import Login from '@/views/Login.vue'
-
 const routes = [
     {
         path: '/',
@@ -26,7 +25,7 @@ const routes = [
     },
     {
         path: '/dashboard',
-        name: 'Dashboard',
+        name: 'dashboard',
         component: Dashboard,
         meta: {
             layout: true,
@@ -34,7 +33,7 @@ const routes = [
     },
     {
         path: '/order',
-        name: 'Order',
+        name: 'order',
         component: Order,
         meta: {
             layout: true,
@@ -42,31 +41,29 @@ const routes = [
     },
     {
         path: '/product',
-        name: 'Product',
-        component: ProductList,
-        meta: {
-            layout: true,
-        },
-    },
-    {
-        path: '/product/create',
-        name: 'ProductCreate',
-        component: ProductNew,
-        meta: {
-            layout: true,
-        },
-    },
-    {
-        path: '/product/:product_id/view',
-        name: 'ProductView',
-        component: ProductView,
+        name: 'product',
+        component: RouterView,
+        children: [
+            {
+                path: '',
+                component: ProductList,
+            },
+            {
+                path: 'create',
+                component: ProductNew,
+            },
+            {
+                path: ':product_id/view',
+                component: ProductView,
+            },
+        ],
         meta: {
             layout: true,
         },
     },
     {
         path: '/category',
-        name: 'Category',
+        name: 'category',
         component: Category,
         meta: {
             layout: true,
@@ -74,23 +71,25 @@ const routes = [
     },
     {
         path: '/inventory',
-        name: 'Inventory',
-        component: Inventory,
-        meta: {
-            layout: true,
-        },
-    },
-    {
-        path: '/inventory/:inventory_id/edit',
-        name: 'Inventory_Edit',
-        component: Inventory_Edit,
+        name: 'inventory',
+        component: RouterView,
+        children: [
+            {
+                path: '',
+                component: Inventory,
+            },
+            {
+                path: ':inventory_id/edit',
+                component: Inventory_Edit,
+            },
+        ],
         meta: {
             layout: true,
         },
     },
     {
         path: '/customer',
-        name: 'Customers',
+        name: 'customer',
         component: Customers,
         meta: {
             layout: true,
@@ -98,7 +97,7 @@ const routes = [
     },
     {
         path: '/settings',
-        name: 'Settings',
+        name: 'settings',
         component: Settings,
         meta: {
             layout: true,
@@ -130,6 +129,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
+    mode: 'history',
     routes
 })
 
