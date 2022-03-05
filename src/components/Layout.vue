@@ -29,8 +29,7 @@
             </div>
             <div id="layoutSidenav_content">
                 <Spinner class="my-5" v-if="loading"></Spinner>
-                <main v-show="!loading">
-                    <div id="toast-container"></div>
+                <main v-show="!loading" style="height:calc(100vh - 56px - 69px);overflow:auto;">
                     <slot></slot>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
