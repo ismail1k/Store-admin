@@ -10,6 +10,7 @@ import ProductView from '@/views/Product-View.vue'
 import Inventory from '@/views/Inventory.vue'
 import Inventory_Edit from '@/views/Inventory_Edit.vue'
 import Customers from '@/views/Customers.vue'
+import Customers_Edit from '@/views/Customers-Edit.vue'
 import Settings from '@/views/Settings.vue'
 
 //Other Path
@@ -90,7 +91,17 @@ const routes = [
     {
         path: '/customer',
         name: 'customer',
-        component: Customers,
+        component: RouterView,
+        children: [
+            {
+                path: '',
+                component: Customers,
+            },
+            {
+                path: ':user_id/view',
+                component: Customers_Edit,
+            },
+        ],
         meta: {
             layout: true,
         },
