@@ -1,6 +1,6 @@
 <template>
-    <div class="container my-2">
-        <div class="card-header d-flex justify-content-between align-items-center my-2">
+    <div>
+        <div class="card-header d-flex justify-content-between align-items-center">
             <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
             <div class="d-flex justify-content-end">
                 <router-link to="/category" class="btn btn-outline-primary ml-2">Categories</router-link>
@@ -8,7 +8,7 @@
             </div>
         </div>
         <spinner v-if="loading"></spinner>
-        <div v-show="!loading">
+        <div class="card-body" v-show="!loading">
             <div class="input-group mb-3">
                 <div class="col-md-4"><label for="">Images: </label></div>
                 <div class="col-12 col-md-8 d-flex px-0">

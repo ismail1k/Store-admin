@@ -1,13 +1,13 @@
 <template>
-    <div class="container">
-        <div class="card-header my-2 d-flex justify-content-between align-items-center">
+    <div>
+        <div class="card-header d-flex justify-content-between align-items-center">
             <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
             <div class="d-flex justify-content-end">
                 <router-link to="/settings" class="btn btn-outline-primary">Settings</router-link>
             </div>
         </div>
         <Spinner v-if="loading"></Spinner>
-        <div v-if="!loading && user">
+        <div class="card-body" v-if="!loading && user">
             <div class="form-group d-md-flex my-3">
                 <div class="col-md-4"><label for="">Fullname: </label></div>
                 <div class="col-12 col-md-8">

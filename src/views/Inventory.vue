@@ -1,5 +1,5 @@
 <template>
-    <div class="container my-2">
+    <div>
         <div class="card-header">
             <div class="d-flex align-items-center">
                 <input type="text" class="form-control" v-model="inventory_name" placeholder="New inventory">

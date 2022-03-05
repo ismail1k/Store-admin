@@ -1,13 +1,13 @@
 <template>
-    <div class="container my-2">
-        <div class="card-header d-flex justify-content-between align-items-center my-2">
+    <div>
+        <div class="card-header d-flex justify-content-between align-items-center">
             <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
             <div class="d-flex justify-content-end">
                 <a v-if="product.availability" href="javascript:void(0)" class="btn btn-outline-danger ml-2" @click="hide()">Hide Product</a>
             </div>
         </div>
         <Spinner v-if="loading" class="my-5"></Spinner>
-        <div v-show="!loading && product">
+        <div class="card-body" v-show="!loading && product">
             <div class="alert alert-warning mx-3 mt-3" v-if="!product.availability">
                 <span>This product is not available for all customers! <a href="javascript:void(0)" @click="show()">click here</a> to make it availabe to all.</span>
             </div>

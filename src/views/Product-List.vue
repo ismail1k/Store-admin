@@ -1,11 +1,11 @@
 <template>
-    <div class="container my-2">
-        <div class="card-header d-flex justify-content-end my-2">
+    <div>
+        <div class="card-header d-flex justify-content-end">
             <router-link to="/inventory" class="btn btn-outline-primary ml-2">Inventory</router-link>
             <router-link to="/product/create" class="btn btn-outline-primary ml-2">Create Product</router-link>
         </div>
         <spinner v-if="loading"></spinner>
-        <div v-if="!loading">
+        <div class="card-body" v-if="!loading">
             <table class="table" v-if="products.length">
                 <tr>
                     <th>#</th>
