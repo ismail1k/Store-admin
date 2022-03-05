@@ -1,21 +1,19 @@
 <template>
-    <div class="container my-2">
-        <div>
-            <div class="form-group d-md-flex my-3">
-                <div class="col-md-4"><label for="">Select: </label></div>
-                <div class="col-12 col-md-8">
-                    <select class="form-select " aria-label="Default select example">
-                        <option>Yes</option>
-                        <option>No</option>
-                    </select>
-                </div>
+    <div>
+        <div class="form-group d-md-flex my-3">
+            <div class="col-md-4"><label for="">Select: </label></div>
+            <div class="col-12 col-md-8">
+                <select class="form-select" aria-label="Default select example">
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
             </div>
-    <div class="form-group d-md-flex my-3">
-        <div class="col-md-4"><label for="">Input: </label></div>
-        <div class="col-12 col-md-8">
-            <input type="text" class="form-control" value="Input" placeholder="fullname" />
         </div>
-    </div>
+        <div class="form-group d-md-flex my-3">
+            <div class="col-md-4"><label for="">Input: </label></div>
+            <div class="col-12 col-md-8">
+                <input type="text" class="form-control" value="Input" placeholder="fullname" />
+            </div>
         </div>
         <div class="form-group d-md-flex my-3">
                 <div class="col-md-4"><label for="">Check box: </label></div>
