@@ -11,26 +11,28 @@
             </div>
         </div>
         <div class="card-body">
-            <Spinner class="my-5" v-if="loading"></Spinner>
-            <table class="table table-striped" v-if="!loading && inventories.length">
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Linked to</th>
-                    <th>Quantity</th>
-                    <th>Action</th>
-                </tr>
-                <tr class="border-0" v-for="(inventory, index) in inventories" :key="(inventory, index)">
-                    <td><span v-text="index+1"></span></td>
-                    <td><span v-text="inventory.name"></span><i v-if="inventory.digital">(Digital)</i></td>
-                    <td><span v-text="inventory.product"></span>Product</td>
-                    <td><span v-text="inventory.quantity"></span></td>
-                    <td>
-                        <a href="javascript:void(0)" v-if="!inventory.product" class="text-danger" @click="remove(inventory.id)"><i class="fa-solid fa-trash-can"></i></a>
-                        <router-link :to="'/inventory/'+inventory.id+'/edit'"><i class="fa-solid fa-pen-to-square"></i></router-link>
-                    </td>
-                </tr>
-            </table>
+            <Spinner class="my-4" v-if="loading"></Spinner>
+            <div v-if="!loading && inventories.length">
+                <table class="table table-striped">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Linked to</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr class="border-0" v-for="(inventory, index) in inventories" :key="(inventory, index)">
+                        <td><span v-text="index+1"></span></td>
+                        <td><span v-text="inventory.name"></span><i v-if="inventory.digital">(Digital)</i></td>
+                        <td><span v-text="inventory.product"></span>Product</td>
+                        <td><span v-text="inventory.quantity"></span></td>
+                        <td>
+                            <a href="javascript:void(0)" v-if="!inventory.product" class="text-danger" @click="remove(inventory.id)"><i class="fa-solid fa-trash-can"></i></a>
+                            <router-link :to="'/inventory/'+inventory.id+'/edit'"><i class="fa-solid fa-pen-to-square"></i></router-link>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </template>

@@ -6,109 +6,111 @@
                 <a v-if="product.availability" href="javascript:void(0)" class="btn btn-outline-danger ml-2" @click="hide()">Hide Product</a>
             </div>
         </div>
-        <Spinner v-if="loading" class="my-5"></Spinner>
-        <div class="card-body" v-show="!loading && product">
-            <div class="alert alert-warning mx-3 mt-3" v-if="!product.availability">
-                <span>This product is not available for all customers! <a href="javascript:void(0)" @click="show()">click here</a> to make it availabe to all.</span>
-            </div>
-            <div class="input-group mb-3">
-                <div class="col-md-4"><label for="">Images: </label></div>
-                <div class="col-12 col-md-8">
-                    <div class="d-flex mb-2">
-                        <div class="col-6">
-                            <img v-if="product.media.primary" :src="$base_url+product.media.primary.path" class="img-thumbnail rounded ">
+        <div class="card-body">
+            <Spinner class="my-4" v-if="loading"></Spinner>
+            <div v-show="!loading && product">
+                <div class="alert alert-warning mx-3 mt-3" v-if="!product.availability">
+                    <span>This product is not available for all customers! <a href="javascript:void(0)" @click="show()">click here</a> to make it availabe to all.</span>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="col-md-4"><label for="">Images: </label></div>
+                    <div class="col-12 col-md-8">
+                        <div class="d-flex mb-2">
+                            <div class="col-6">
+                                <img v-if="product.media.primary" :src="$base_url+product.media.primary.path" class="img-thumbnail rounded ">
+                            </div>
+                            <div class="col-6 overflow-auto mx-md-3 px-0 row" style="max-height:250px;">
+                                <div class="col-4 position-relative d-flex justify-content-between p-0" v-for="media in product.media.attachment" :key="media">
+                                    <span>
+                                        <img :src="$base_url+media.path" class="rounded position-relative w-100 px-1 py-2">
+                                        <button class="btn btn-sm btn-danger py-0 position-absolute top-0 end-0 m-1" @click="removeMedia(media)"><i class="fas fa-times"></i></button>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6 overflow-auto mx-md-3 px-0 row" style="max-height:250px;">
-                            <div class="col-4 position-relative d-flex justify-content-between p-0" v-for="media in product.media.attachment" :key="media">
-                                <span>
-                                    <img :src="$base_url+media.path" class="rounded position-relative w-100 px-1 py-2">
-                                    <button class="btn btn-sm btn-danger py-0 position-absolute top-0 end-0 m-1" @click="removeMedia(media)"><i class="fas fa-times"></i></button>
-                                </span>
+                        <div class="d-flex">
+                            <div class="col-6">
+                                <input type="file" class="form-control" id="media_primary"/>
+                                <small><i>leave it empty if you dont want to change it.</i></small>
+                            </div>
+                            <div class="col-6">
+                                <input type="file" class="form-control" id="media_secondary" multiple/>
+                                <small><i>You can add more images if you have.</i></small>
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex">
-                        <div class="col-6">
-                            <input type="file" class="form-control" id="media_primary"/>
-                            <small><i>leave it empty if you dont want to change it.</i></small>
+                </div>
+                <div class="form-group d-md-flex">
+                    <div class="col-md-4"><label for="">Product Name: </label></div>
+                    <div class="col-12 col-md-8">
+                        <input type="text" v-model="product.name" class="form-control" placeholder="Product name" />
+                        <small class="text-danger" v-if="product.name.includes('/')"><i>The product name must not contain slash .</i></small>
+                    </div>
+                </div>
+                <div class="form-group d-md-flex">
+                    <div class="col-md-4"><label for="">Tags: </label></div>
+                    <div class="col-12 col-md-8">
+                        <input type="text" v-model="product.tags" class="form-control" placeholder="sport, news, blog..." />
+                        <small><i>This helps customers to find the product in the search easy, recommended to use it.</i></small>
+                    </div>
+                </div>
+                <div class="form-group d-md-flex">
+                    <div class="col-md-4"><label for="">Short Description : </label></div>
+                    <div class="col-12 col-md-8">
+                        <textarea type="text" v-model="product.short_description" class="form-control" placeholder="Small Description" />
+                    </div>
+                </div>
+                <div class="form-group d-md-flex">
+                    <div class="col-md-4"><label for="">Description : </label></div>
+                    <div class="col-12 col-md-8">
+                        <textarea type="text" v-model="product.description" class="form-control" placeholder="Full Description" />
+                    </div>
+                </div>
+                <div class="form-group d-md-flex">
+                    <div class="col-md-4"><label for="">Category : </label></div>
+                    <div class="col-md-8 d-flex justify-content-between">
+                        <select class="form-select" v-model="product.category.id">
+                            <option value="null" selected>Uncategoried</option>
+                            <option v-for="category in categories" :key="category" :value="category.id"><span v-text="category.name"></span> (Has <span v-text="category.product"></span> products)</option>
+                            <option value="0">New Category</option>
+                        </select>
+                        <input v-if="product.category.id == 0" v-model="product.category.name" type="text" class="col-9 form-control ml-2" placeholder="Category name">
+                    </div>
+                </div>
+                <div class="form-group d-md-flex">
+                    <div class="col-md-4"><label for="">Inventory : </label></div>
+                    <div class="col-md-8 d-flex justify-content-between">
+                        <select class="form-select mr-2" v-model="product.inventory.id">
+                            <option v-for="inventory in inventories" :key="inventory" :value="inventory.id" selected>{{inventory.name}}</option>
+                            <option value="0" selected>New Inventory</option>
+                        </select>
+                        <select v-if="product.inventory.id == 0" class="col-2 form-select" v-model="product.inventory.type">
+                            <option value="1" selected>Physical</option>
+                            <option value="2">Digital</option>
+                        </select>
+                        <input v-if="product.inventory.id == 0" type="text" v-model="product.inventory.name" class="col-6 form-control ml-2" placeholder="Inventory name"/>
+                    </div>
+                </div>
+                <div class="form-group d-md-flex">
+                    <div class="col-md-4"><label for="">Price : </label></div>
+                    <div class="col-md-8 d-flex justify-content-between">
+                        <div class="col-4 px-0">
+                            <input type="number" step="0.01" v-model="product.price.original" class="form-control text-center" placeholder="Original Price"/>
+                            <small><i>Original Price</i></small>
                         </div>
-                        <div class="col-6">
-                            <input type="file" class="form-control" id="media_secondary" multiple/>
-                            <small><i>You can add more images if you have.</i></small>
+                        <div class="col-4 px-0 mx-1">
+                            <input type="number" step="0.01" v-model="product.price.discount" class="form-control text-center" placeholder="Discount"/>
+                            <small><i>Discount</i></small>
+                        </div>
+                        <div class="px-0 mr-1">
+                            <input type="text" :value="parseInt(product.price.original - product.price.discount)+' '+$store.state.currency" class="form-control text-center" placeholder="Discount" readonly/>
+                            <small><i>Selling Price</i></small>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Product Name: </label></div>
-                <div class="col-12 col-md-8">
-                    <input type="text" v-model="product.name" class="form-control" placeholder="Product name" />
-                    <small class="text-danger" v-if="product.name.includes('/')"><i>The product name must not contain slash .</i></small>
+                <div class="d-flex justify-content-end m-3">
+                    <button type="button" class="btn btn-outline-primary" @click="save()">Save</button>
                 </div>
-            </div>
-            <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Tags: </label></div>
-                <div class="col-12 col-md-8">
-                    <input type="text" v-model="product.tags" class="form-control" placeholder="sport, news, blog..." />
-                    <small><i>This helps customers to find the product in the search easy, recommended to use it.</i></small>
-                </div>
-            </div>
-            <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Short Description : </label></div>
-                <div class="col-12 col-md-8">
-                    <textarea type="text" v-model="product.short_description" class="form-control" placeholder="Small Description" />
-                </div>
-            </div>
-            <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Description : </label></div>
-                <div class="col-12 col-md-8">
-                    <textarea type="text" v-model="product.description" class="form-control" placeholder="Full Description" />
-                </div>
-            </div>
-            <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Category : </label></div>
-                <div class="col-md-8 d-flex justify-content-between">
-                    <select class="form-select" v-model="product.category.id">
-                        <option value="null" selected>Uncategoried</option>
-                        <option v-for="category in categories" :key="category" :value="category.id"><span v-text="category.name"></span> (Has <span v-text="category.product"></span> products)</option>
-                        <option value="0">New Category</option>
-                    </select>
-                    <input v-if="product.category.id == 0" v-model="product.category.name" type="text" class="col-9 form-control ml-2" placeholder="Category name">
-                </div>
-            </div>
-            <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Inventory : </label></div>
-                <div class="col-md-8 d-flex justify-content-between">
-                    <select class="form-select mr-2" v-model="product.inventory.id">
-                        <option v-for="inventory in inventories" :key="inventory" :value="inventory.id" selected>{{inventory.name}}</option>
-                        <option value="0" selected>New Inventory</option>
-                    </select>
-                    <select v-if="product.inventory.id == 0" class="col-2 form-select" v-model="product.inventory.type">
-                        <option value="1" selected>Physical</option>
-                        <option value="2">Digital</option>
-                    </select>
-                    <input v-if="product.inventory.id == 0" type="text" v-model="product.inventory.name" class="col-6 form-control ml-2" placeholder="Inventory name"/>
-                </div>
-            </div>
-            <div class="form-group d-md-flex">
-                <div class="col-md-4"><label for="">Price : </label></div>
-                <div class="col-md-8 d-flex justify-content-between">
-                    <div class="col-4 px-0">
-                        <input type="number" step="0.01" v-model="product.price.original" class="form-control text-center" placeholder="Original Price"/>
-                        <small><i>Original Price</i></small>
-                    </div>
-                    <div class="col-4 px-0 mx-1">
-                        <input type="number" step="0.01" v-model="product.price.discount" class="form-control text-center" placeholder="Discount"/>
-                        <small><i>Discount</i></small>
-                    </div>
-                    <div class="px-0 mr-1">
-                        <input type="text" :value="parseInt(product.price.original - product.price.discount)+' '+$store.state.currency" class="form-control text-center" placeholder="Discount" readonly/>
-                        <small><i>Selling Price</i></small>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex justify-content-end m-3">
-                <button type="button" class="btn btn-outline-primary" @click="save()">Save</button>
             </div>
         </div>
         <div v-if="!loading && !product" class="my-5 d-flex justify-content-center">

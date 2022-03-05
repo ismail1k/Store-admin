@@ -3,55 +3,57 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
         </div>
-        <spinner v-if="loading"></spinner>
-        <div class="cart-body" v-else>
-            <div class="d-flex my-1">
-                <div class="col-4"><span>Inventory Name: </span> </div>
-                <div class="col-8"><input type="text" v-model="inventory.name" onfocus="this.select()" class="form-control"></div>
-            </div>
-            <div class="d-flex my-1">
-                <div class="col-4"><span>Quantity (<span>
-                    <i v-if="inventory.digital">Digital</i>
-                    <i v-if="!inventory.digital">Physical</i>
-                </span>): </span> </div>
-                <div class="col-8">
-                    <div class="input-group">
-                        <input type="text" class="form-control" v-model="inventory.quantity" onfocus="this.select()" placeholder="Set the quantity you want to add." :disabled="inventory.digital">
-                        <span class="input-group-text" id="basic-addon2">item</span>
+        <div class="cart-body">
+            <Spinner class="my-4" v-if="loading"></Spinner>
+            <div v-else>
+                <div class="d-flex my-1">
+                    <div class="col-4"><span>Inventory Name: </span> </div>
+                    <div class="col-8"><input type="text" v-model="inventory.name" onfocus="this.select()" class="form-control"></div>
+                </div>
+                <div class="d-flex my-1">
+                    <div class="col-4"><span>Quantity (<span>
+                        <i v-if="inventory.digital">Digital</i>
+                        <i v-if="!inventory.digital">Physical</i>
+                    </span>): </span> </div>
+                    <div class="col-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" v-model="inventory.quantity" onfocus="this.select()" placeholder="Set the quantity you want to add." :disabled="inventory.digital">
+                            <span class="input-group-text" id="basic-addon2">item</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="my-3" v-if="inventory.digital">
-                <table class="table table-bordered">
-                    <tr>
-                        <th width="50px">#</th>
-                        <th>Value</th>
-                        <th width="50px">Action</th>
-                    </tr>
-                    <tr v-for="item, index in inventory.items" :key="(item, index)">
-                        <td v-text="index+1"></td>
-                        <td v-text="item.value"></td>
-                        <td align="center">
-                            <span class="text-danger btn" @click="removeItem(item.id)"><i class="fa-solid fa-xmark"></i></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>--</td>
-                        <td>
-                            <div class="p-1">
-                                <input type="text" v-model="newItemKey" onfocus="this.select()" class="form-control form-control-sm" placeholder="Add new item">
-                            </div>
-                        </td>
-                        <td align="center">
-                            <span class="text-success btn" @click="insertItem()"><i class="fa-solid fa-check"></i></span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="d-flex align-items-center justify-content-end m-2">
-                <span v-if="inventory.product"><i class="text-muted">if you want to remove this inventory, please go to <router-link to="/product" >product page</router-link> and try to unlink it from all products!</i></span>
-                <button v-if="!inventory.product" class="btn btn-outline-danger" @click="removeInventory()">Remove</button>
-                <button class="btn btn-primary ml-2" @click="save()">Save</button>
+                <div class="my-3" v-if="inventory.digital">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="50px">#</th>
+                            <th>Value</th>
+                            <th width="50px">Action</th>
+                        </tr>
+                        <tr v-for="item, index in inventory.items" :key="(item, index)">
+                            <td v-text="index+1"></td>
+                            <td v-text="item.value"></td>
+                            <td align="center">
+                                <span class="text-danger btn" @click="removeItem(item.id)"><i class="fa-solid fa-xmark"></i></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>--</td>
+                            <td>
+                                <div class="p-1">
+                                    <input type="text" v-model="newItemKey" onfocus="this.select()" class="form-control form-control-sm" placeholder="Add new item">
+                                </div>
+                            </td>
+                            <td align="center">
+                                <span class="text-success btn" @click="insertItem()"><i class="fa-solid fa-check"></i></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="d-flex align-items-center justify-content-end m-2">
+                    <span v-if="inventory.product"><i class="text-muted">if you want to remove this inventory, please go to <router-link to="/product" >product page</router-link> and try to unlink it from all products!</i></span>
+                    <button v-if="!inventory.product" class="btn btn-outline-danger" @click="removeInventory()">Remove</button>
+                    <button class="btn btn-primary ml-2" @click="save()">Save</button>
+                </div>
             </div>
         </div>
     </div>

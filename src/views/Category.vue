@@ -7,23 +7,25 @@
             </div>
         </div>
         <div class="card-body">
-            <Spinner class="my-5" v-if="loading"></Spinner>
-            <table class="table table-striped" v-if="!loading && categories.length">
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Products</th>
-                    <th width="120px">Action</th>
-                </tr>
-                <tr class="border-0" v-for="(category, index) in categories" :key="(category, index)">
-                    <td><span v-text="index+1"></span></td>
-                    <td><span v-text="category.name"></span></td>
-                    <td><span v-text="category.product"></span></td>
-                    <td>
-                        <button class="btn btn-outline-danger" @click="remove(category.id)">Remove</button>
-                    </td>
-                </tr>
-            </table>
+            <Spinner class="my-4" v-if="loading"></Spinner>
+            <div v-if="!loading && categories.length">
+                <table class="table table-striped">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Products</th>
+                        <th width="120px">Action</th>
+                    </tr>
+                    <tr class="border-0" v-for="(category, index) in categories" :key="(category, index)">
+                        <td><span v-text="index+1"></span></td>
+                        <td><span v-text="category.name"></span></td>
+                        <td><span v-text="category.product"></span></td>
+                        <td>
+                            <button class="btn btn-outline-danger" @click="remove(category.id)">Remove</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </template>

@@ -6,7 +6,7 @@
                 <router-link to="/settings" class="btn btn-outline-primary">Settings</router-link>
             </div>
         </div>
-        <Spinner v-if="loading"></Spinner>
+        <Spinner class="my-4" v-if="loading"></Spinner>
         <div class="card-body" v-if="!loading && user">
             <div class="form-group d-md-flex my-3">
                 <div class="col-md-4"><label for="">Fullname: </label></div>
