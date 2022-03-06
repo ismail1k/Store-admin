@@ -32,7 +32,7 @@
                     <select class="form-select" v-model="user.role" aria-label="Default select example">
                         <option value="1">Memeber</option>
                         <option value="2" class="text-success">Staff</option>
-                        <option value="3" class="text-danger">Owner</option>
+                        <option value="3" class="text-danger" v-if="$store.state.user.role == 3">Owner</option>
                     </select>
                     <small v-if="user.role == 3"><i>* If the user has the owner role, they will have access to everything.</i></small>
                 </div>
@@ -198,10 +198,12 @@ export default {
                 this.loading = false
                 return false
             }
-            if(!await this.editPermission()){
-                toast.error('Cannot edit permissions!')
-                this.loading = false
-                return false
+            if(this.user.role == 2){
+                if(!await this.editPermission()){
+                    toast.error('Cannot edit permissions!')
+                    this.loading = false
+                    return false
+                }
             }
             this.loading = false
             toast.info('User info changed!')

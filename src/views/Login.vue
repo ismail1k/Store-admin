@@ -71,9 +71,11 @@ export default {
                     if(response.data.admin == true){
                         if(!response.data.active){
                             self.alert = "Your account is suspended! You can't login."
+                            return true
                         }else if(response.data.owner == true){
                             localStorage.setItem('token', response.data.token)
                             self.$router.back()
+                            return true
                         }else if(response.data.admin == true){
                             $.each(response.data.permission, function(key, value){
                                 if(value == true){
@@ -83,7 +85,6 @@ export default {
                                 }
                             })
                         }
-                        console.log(response.data)
                         self.alert = "You can't access admin panel, try to contact the owner."
                     }else{
                         self.alert = 'You are not allowed to access admin panel.'

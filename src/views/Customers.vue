@@ -27,9 +27,11 @@
                             <span class="text-danger" v-if="user.role == 3">Owner</span>
                         </td>
                         <td>
-                            <a v-if="(user.id != $store.state.user.id) && (!user.active)" class="btn text-success py-0" @click="unban(user.id)"><i class="fa-solid fa-user-check"></i></a>
-                            <a v-if="(user.id != $store.state.user.id) && (user.active)" class="btn text-danger py-0" @click="ban(user.id)"><i class="fa-solid fa-user-minus"></i></a>
-                            <router-link v-if="user.id != $store.state.user.id" :to="'/customer/'+user.id+'/view'" class="btn text-primary py-0" ><i class="fa-solid fa-pen-to-square"></i></router-link>
+                            <span v-if="$store.state.user.role >= user.role">
+                                <a v-if="(user.id != $store.state.user.id) && (!user.active)" class="btn text-success py-0" @click="unban(user.id)"><i class="fa-solid fa-user-check"></i></a>
+                                <a v-if="(user.id != $store.state.user.id) && (user.active)" class="btn text-danger py-0" @click="ban(user.id)"><i class="fa-solid fa-user-minus"></i></a>
+                                <router-link v-if="user.id != $store.state.user.id" :to="'/customer/'+user.id+'/view'" class="btn text-primary py-0" ><i class="fa-solid fa-pen-to-square"></i></router-link>    
+                            </span>
                         </td>
                     </tr>
                 </table>
