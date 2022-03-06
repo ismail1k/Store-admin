@@ -75,13 +75,16 @@ export default {
                     },
                 })
                 .then(function(response){
-                    if(response.data.admin == true){
-                        user = response.data
-                    } else {
-                        localStorage.setItem('token', '')
-                        self.$router.push('/login')
-                        user = false
+                    if(response.data.active){
+                        if(response.data.admin == true){
+                            user = response.data
+                            self.$store.state.user = response.data
+                            return true
+                        }
                     }
+                    localStorage.setItem('token', '')
+                    user = false
+                    self.$router.push('/login')
                 })
                 .catch(function(error){
                     localStorage.setItem('token', '')
@@ -151,6 +154,7 @@ export default {
             })
             .then(function(){
                 localStorage.setItem('token', '')
+                self.$store.state.user = false
                 self.$router.push({path: '/login'})
             })
             .catch(function(error){

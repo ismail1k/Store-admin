@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!$store.state.user.auth" class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center">
         <div class="col-12 col-md-10 col-lg-8 col-xl-5">
             <div class="form-group my-5">
                 <div class="d-flex justify-content-center">
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import $ from 'jquery'
 import axios from 'axios'
 import Spinner from '@/components/Spinner.vue'
 
@@ -68,8 +69,22 @@ export default {
             .then(function(response){
                 if(response.data.auth == true){
                     if(response.data.admin == true){
-                        localStorage.setItem('token', response.data.token)
-                        self.$router.back()
+                        if(!response.data.active){
+                            self.alert = "Your account is suspended! You can't login."
+                        }else if(response.data.owner == true){
+                            localStorage.setItem('token', response.data.token)
+                            self.$router.back()
+                        }else if(response.data.admin == true){
+                            $.each(response.data.permission, function(key, value){
+                                if(value == true){
+                                    localStorage.setItem('token', response.data.token)
+                                    self.$router.push('/'+key) 
+                                    return true
+                                }
+                            })
+                        }
+                        console.log(response.data)
+                        self.alert = "You can't access admin panel, try to contact the owner."
                     }else{
                         self.alert = 'You are not allowed to access admin panel.'
                     }
@@ -87,7 +102,9 @@ export default {
     },
     created(){
         if(this.$store.state.user.auth){
-            this.$router.back()
+            if(localStorage.getItem('token')){
+                this.$router.back()
+            }
         }
     },
 }

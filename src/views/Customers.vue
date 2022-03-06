@@ -27,8 +27,9 @@
                             <span class="text-danger" v-if="user.role == 3">Owner</span>
                         </td>
                         <td>
-                            <a class="btn text-danger py-0 mx-1" @click="remove(user.id)"><i class="fa-solid fa-trash-can"></i></a>
-                            <router-link :to="'/customer/'+user.id+'/view'" class="btn text-primary py-0 mx-1" ><i class="fa-solid fa-pen-to-square"></i></router-link>
+                            <a v-if="(user.id != $store.state.user.id) && (!user.active)" class="btn text-success py-0" @click="unban(user.id)"><i class="fa-solid fa-user-check"></i></a>
+                            <a v-if="(user.id != $store.state.user.id) && (user.active)" class="btn text-danger py-0" @click="ban(user.id)"><i class="fa-solid fa-user-minus"></i></a>
+                            <router-link v-if="user.id != $store.state.user.id" :to="'/customer/'+user.id+'/view'" class="btn text-primary py-0" ><i class="fa-solid fa-pen-to-square"></i></router-link>
                         </td>
                     </tr>
                 </table>
@@ -76,8 +77,59 @@ export default {
                 self.loading = false
             })
         },
-        remove: function(user_id){
-            console.log(user_id)
+        ban: function(user_id){
+            let toast = useToast()
+            let self = this
+            this.$confirm('Are you sure you want to ban this user?')
+            .then(function(){
+                self.loading = true
+                axios.post(self.$api+'/user/ban', {
+                    token: localStorage.getItem('token'),
+                    user_id: user_id,
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        toast.info('User Banned!')
+                    } else {
+                        toast.error('Error!')
+                    }
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                    self.load()
+                })
+            })
+        },
+        unban: function(user_id){
+            let toast = useToast()
+            let self = this
+            this.$confirm('Are you sure you want to remove ban from this user?')
+            .then(function(){
+                self.loading = true
+                axios.post(self.$api+'/user/unban', {
+                    token: localStorage.getItem('token'),
+                    user_id: user_id,
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        toast.info('User Active now!')
+                    } else {
+                        toast.error('Error!')
+                    }
+                })
+                .catch(function(error){
+                    toast.error('Error!')
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.loading = false
+                    self.load()
+                })
+            })
         },
     },
     created(){

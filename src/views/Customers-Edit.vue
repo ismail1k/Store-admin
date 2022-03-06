@@ -26,7 +26,7 @@
                 <input type="text" class="form-control" v-model="user.phone" placeholder="Phone number"/>
                 </div>
             </div>
-            <div class="form-group d-md-flex my-3">
+            <div class="form-group d-md-flex my-3" v-if="user.id != $store.state.user.id">
                 <div class="col-md-4"><label for="">Role: </label></div>
                 <div class="col-12 col-md-8">
                     <select class="form-select" v-model="user.role" aria-label="Default select example">
@@ -34,10 +34,11 @@
                         <option value="2" class="text-success">Staff</option>
                         <option value="3" class="text-danger">Owner</option>
                     </select>
+                    <small v-if="user.role == 3"><i>* If the user has the owner role, they will have access to everything.</i></small>
                 </div>
             </div>
-            <div v-if="user.role <= 3" class="fw-bolder mt-5">Give access to:</div>
-            <div v-if="user.role <= 3" class="row justify-content-start mx-3">
+            <div v-if="user.role == 2 && user.id != $store.state.user.id" class="fw-bolder mt-5">Give access to:</div>
+            <div v-if="user.role == 2 && user.id != $store.state.user.id" class="row justify-content-start mx-3">
                 <div class="col-3 d-flex justify-content-between">
                     <div class="form-check form-switch mt-3">
                         <input v-model="user.permission.dashboard" class="form-check-input" id="dashboard" type="checkbox" role="switch">
@@ -114,24 +115,17 @@ export default {
             axios.get(this.$api+'/user', {
                 params: {
                     token: localStorage.getItem('token'),
-                    user_id: self.$route.params.user_id
+                    user_id: self.$route.params.user_id,
                 },
             })
             .then(function(response){
                 self.user = {
+                    id: response.data.id,
                     name: response.data.name,
                     email: response.data.email,
                     phone: response.data.phone,
                     role: response.data.role,
-                    permission: {
-                        dashboard: response.data.permission.dashboard?true:false,
-                        order: response.data.permission.order?true:false,
-                        product: response.data.permission.product?true:false,
-                        inventory: response.data.permission.inventory?true:false,
-                        category: response.data.permission.category?true:false,
-                        customer: response.data.permission.customer?true:false,
-                        settings: response.data.permission.settings?true:false,
-                    },
+                    permission: response.data.permission,
                 }
             })
             .catch(function(error){
@@ -142,8 +136,76 @@ export default {
                 self.loading = false
             })
         },
-        save: function(){
-            axios.post(this.$api+'')
+        editUser: async function(){
+            let self = this
+            let ok = false
+            let toast = useToast()
+            await axios.post(this.$api+'/user/edit', {
+                token: localStorage.getItem('token'),
+                user_id: self.user.id,
+                name: self.user.name,
+                email: self.user.email,
+                phone: self.user.phone,
+                role: self.user.role,
+            })
+            .then(function(response){
+                if(response.data.status == 200){
+                    ok = true
+                } else if(response.data.status == 403){
+                    toast.warning('Unauthorized action!')
+                } else {
+                    toast.warning('Error!')
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+                toast.error('Error!')
+            })
+            .finally(function(){
+                self.loading = false
+            })
+            return ok
+        },
+        editPermission: async function(){
+            let self = this
+            let toast = useToast()
+            let ok = false
+            await axios.post(this.$api+'/permission/update', Object.assign({
+                token: localStorage.getItem('token'),
+                user_id: self.$route.params.user_id,
+            }, this.user.permission))
+            .then(function(response){
+                if(response.data.status == 200){
+                    ok = true
+                } else {
+                    toast.error('Error!')
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+                toast.error('Error!')
+            })
+            .finally(function(){
+                self.loading = false
+            })
+            return ok
+        },
+        save: async function(){
+            this.loading = true
+            let toast = useToast()
+            if(!await this.editUser()){
+                toast.error('Cannot edit user!')
+                this.loading = false
+                return false
+            }
+            if(!await this.editPermission()){
+                toast.error('Cannot edit permissions!')
+                this.loading = false
+                return false
+            }
+            this.loading = false
+            toast.info('User info changed!')
+            
         },
     },
     created(){
