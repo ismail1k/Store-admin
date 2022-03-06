@@ -11,8 +11,8 @@
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
+                <nav class="sb-sidenav accordion sb-sidenav-dark position-fixed w-100" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu overflow-auto">
                         <div class="nav" v-if="menu.length">
                             <div class="sb-sidenav-menu-heading">Management</div>
                             <router-link v-for="m in menu" :key="m" class="nav-link" :to="'/'+m.url">
@@ -21,7 +21,7 @@
                             </router-link>
                         </div>
                     </div>
-                    <div class="sb-sidenav-footer" v-if="user">
+                    <div class="sb-sidenav-footer position-static bottom-0 w-100" v-if="user">
                         <div class="small">Logged in as:</div>
                         {{user.name}}
                     </div>
@@ -198,7 +198,7 @@ export default {
 }
 ::-webkit-scrollbar {
     overflow: hidden;
-    width: 7px;
+    width: 6px;
     height: 6px;
     margin:5px;
 }
@@ -206,7 +206,7 @@ export default {
     border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgb(160, 160, 160);
+    background: rgb(192, 192, 192);
     border-radius: 3px;
 }
 </style>
