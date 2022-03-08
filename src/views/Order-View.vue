@@ -9,7 +9,7 @@
         <div class="card-body">
             <Spinner v-if="loading"></Spinner>
             <div v-if="!loading && order">
-                Order
+                Order View
             </div>
             <div v-if="!loading && !order" class="d-flex justify-content-center">
                 <span>Order not found!</span>
