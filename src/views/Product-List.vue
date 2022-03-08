@@ -18,7 +18,7 @@
                     <tr v-for="product, index in products" :key="(product, index)">
                         <td v-text="index+1"></td>
                         <td>
-                            <b><span v-text="product.name"></span></b>
+                            <b><span v-text="product.name"></span> <span v-if="!product.availability" class="badge bg-warning text-dark">Inactive</span></b>
                             <span v-if="product.inventory.digital"><small><i>(Digital)</i></small></span><br>
                             <i class="d-none d-md-block py-0"><small v-text="product.short_description.substring(0, 180)"></small>...</i>
                         </td>

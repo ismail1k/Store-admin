@@ -9,7 +9,7 @@
         <div class="card-body">
             <Spinner class="my-4" v-if="loading"></Spinner>
             <div v-show="!loading && product">
-                <div class="alert alert-warning mx-3 mt-3" v-if="!product.availability">
+                <div class="alert alert-warning" v-if="!product.availability">
                     <span>This product is not available for all customers! <a href="javascript:void(0)" @click="show()">click here</a> to make it availabe to all.</span>
                 </div>
                 <div class="input-group mb-3">
