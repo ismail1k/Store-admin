@@ -40,7 +40,7 @@
 <script>
 import axios from 'axios'
 import { useToast } from "vue-toastification"
-import Spinner from '../components/Spinner.vue';
+import Spinner from '../components/Spinner.vue'
 export default {
   components: { Spinner },
     data() {

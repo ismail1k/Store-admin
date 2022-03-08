@@ -201,16 +201,11 @@ export default {
     color:rgb(255, 255, 255);
 }
 ::-webkit-scrollbar {
-    overflow: hidden;
-    width: 6px;
-    height: 6px;
-    margin:5px;
-}
-::-webkit-scrollbar-track {
-    border-radius: 5px;
+    width: 5px;
+    height: 5px;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgb(192, 192, 192);
-    border-radius: 3px;
+    background: rgb(141, 141, 141);
+    border-radius: 2px;
 }
 </style>

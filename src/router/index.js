@@ -4,6 +4,8 @@ import { RouterView, createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '@/views/Dashboard.vue'
 import Category from '@/views/Category.vue'
 import Order from '@/views/Order.vue'
+import OrderCreate from '@/views/Order-Create.vue'
+import OrderView from '@/views/Order-View.vue'
 import ProductList from '@/views/Product-List.vue'
 import ProductNew from '@/views/Product-New.vue'
 import ProductView from '@/views/Product-View.vue'
@@ -35,7 +37,21 @@ const routes = [
     {
         path: '/order',
         name: 'order',
-        component: Order,
+        component: RouterView,
+        children: [
+            {
+                path: '',
+                component: Order,
+            },
+            {
+                path: 'create',
+                component: OrderCreate,
+            },
+            {
+                path: ':order_id/view',
+                component: OrderView,
+            },
+        ],
         meta: {
             layout: true,
         },
