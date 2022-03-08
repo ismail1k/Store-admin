@@ -17,8 +17,8 @@
                     <tr v-for="order, index in orders" :key="(order, index)">
                         <td v-text="index + 1"></td>
                         <td>
-                            <div><b v-text="order.fullname"></b></div>
-                            <small><i v-text="order.phone"></i></small>
+                            <div class="p-0"><b v-text="order.fullname"></b></div>
+                            <small class="p-0"><i v-text="order.phone"></i></small>
                         </td>
                         <td v-text="order.address"></td>
                         <td>
@@ -28,7 +28,7 @@
                             <span v-if="order.state == 3" class="badge bg-success">Complete</span>
                         </td>
                         <td>
-                            <router-link :to="'/order/'+order.id+'/view'" class="btn btn-sm btn-outline-primary">More</router-link>
+                            <router-link :to="'/order/'+order.id+'/view'" class="btn btn-sm btn-outline-primary py-1 px-3">More</router-link>
                         </td>
                     </tr>
                 </table>
