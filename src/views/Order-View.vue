@@ -12,7 +12,7 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>Created by</td>
-                        <td v-text="order.user.name"></td>
+                        <td v-text="order.user?order.user.name:'Guest'"></td>
                     </tr>
                     <tr>
                         <td>Fullname</td>
