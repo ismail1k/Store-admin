@@ -11,6 +11,7 @@ import ProductNew from '@/views/Product-New.vue'
 import ProductView from '@/views/Product-View.vue'
 import Inventory from '@/views/Inventory.vue'
 import Inventory_Edit from '@/views/Inventory_Edit.vue'
+import Contact from '@/views/Customers.vue'
 import Customers from '@/views/Customers.vue'
 import Customers_Edit from '@/views/Customers-Edit.vue'
 import Settings from '@/views/Settings.vue'
@@ -116,6 +117,20 @@ const routes = [
             {
                 path: ':user_id/view',
                 component: Customers_Edit,
+            },
+        ],
+        meta: {
+            layout: true,
+        },
+    },
+    {
+        path: '/contact',
+        name: 'contact',
+        component: RouterView,
+        children: [
+            {
+                path: '',
+                component: Contact,
             },
         ],
         meta: {

@@ -26,6 +26,7 @@
                             <span v-if="order.state == 1" class="badge bg-warning">Pending</span>
                             <span v-if="order.state == 2" class="badge bg-info">Processing</span>
                             <span v-if="order.state == 3" class="badge bg-success">Complete</span>
+                            <span v-if="order.state == 4" class="badge bg-info">Refund</span>
                         </td>
                         <td>
                             <router-link :to="'/order/'+order.id+'/view'" class="btn btn-sm btn-outline-primary py-1 px-3">More</router-link>
