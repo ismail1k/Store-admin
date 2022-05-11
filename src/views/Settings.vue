@@ -25,11 +25,11 @@
         </div>
         </div>
         <div class="form-group d-md-flex my-3">
-                <div class="col-md-4"><label for="">Switch: </label></div>
-               <div class="form-check form-switch mt-3">
-        <input class="form-check-input" type="checkbox" role="switch"/>
-        <label class="form-check-label"  for="flexSwitchCheckDefault" >Switch</label>
-      </div>
+            <div class="col-md-4"><label for="">Switch: </label></div>
+            <div class="form-check form-switch mt-3">
+                <input class="form-check-input" type="checkbox" role="switch"/>
+                <label class="form-check-label"  for="flexSwitchCheckDefault" >Switch</label>
+            </div>
         </div>
     </div>
 </template>

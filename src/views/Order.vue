@@ -6,21 +6,31 @@
         <div class="card-body">
             <Spinner v-if="loading"></Spinner>
             <div v-if="!loading && orders.length">
+                <div class="form-check form-switch d-flex justify-content-end">
+                    <label class="form-check-label" style="margin-right:40px;" for="allOrders" >Show all Orders</label>
+                    <input class="form-check-input" type="checkbox" v-model="allOrders" id="allOrders" role="switch">
+                </div>
                 <table class="table">
                     <tr>
                         <th>id</th>
                         <th>Name</th>
                         <th>Address</th>
+                        <th>Payment Method</th>
                         <th>State</th>
                         <th>Action</th>
                     </tr>
-                    <tr v-for="order, index in orders" :key="(order, index)">
+                    <tr v-for="order, index in orders.filter(i => allOrders || (i.state == 1) || (i.state == 2) || (i.state == 3))" :key="(order, index)">
                         <td v-text="index + 1"></td>
                         <td>
                             <div class="p-0"><b v-text="order.fullname"></b></div>
                             <small class="p-0"><i v-text="order.phone"></i></small>
                         </td>
                         <td v-text="order.address"></td>
+                        <td>
+                            <span class="badge bg-primary" v-if="order.payment_method == 'paypal'">PayPal</span>
+                            <span class="badge bg-primary" v-if="order.payment_method == 'cod'">Cash On Delivery</span>
+                            <span class="badge bg-primary" v-if="order.payment_method == 'cc'">Credit Card</span>
+                        </td>
                         <td>
                             <span v-if="order.state == 0" class="badge bg-danger">Reject</span>
                             <span v-if="order.state == 1" class="badge bg-warning">Pending</span>
@@ -50,6 +60,7 @@ export default {
         return {
             loading: false,
             orders: false,
+            allOrders: localStorage.getItem('allOrders'),
         }
     },
     name: 'Order',
@@ -77,6 +88,11 @@ export default {
                 self.loading = false
             })
         },
+    },
+    watch: {
+        allOrders(value){
+            localStorage.setItem('allOrders', value)
+        }
     },
     created(){
         this.load()
