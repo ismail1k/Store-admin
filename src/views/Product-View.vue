@@ -499,6 +499,10 @@ export default {
     },
     created(){
         this.load()
+    },
+    mounted(){
+        $('#media_primary').get(0).value = null
+        $('#media_secondary').get(0).value = null
     }
 }
 </script>

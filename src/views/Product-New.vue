@@ -67,7 +67,7 @@
                             <option value="1" selected>Physical</option>
                             <option value="2">Digital</option>
                         </select>
-                        <input type="text" v-model="product.inventory.name" class="col-9 form-control ml-2" placeholder="Inventory name"/>
+                        <input type="text" v-model="product.inventory.name" @click="!product.inventory.name&&product.name ?product.inventory.name = product.name+'\'s Inventory':'' " class="col-9 form-control ml-2" placeholder="Inventory name"/>
                     </div>
                 </div>
                 <div class="form-group d-md-flex">
@@ -111,8 +111,8 @@ export default {
                 short_description: '',
                 description: '',
                 price: {
-                    original: 0.01,
-                    discount: 0,
+                    original: 0.00,
+                    discount: 0.00,
                 },
                 category: {
                     id: null,
@@ -322,6 +322,7 @@ export default {
                 return false
             }
             this.$alert('You have created a product!')
+            this.$router.push({path: '/inventory/'+this.product.inventory.id+'/edit'})
         },
     },
     created(){
@@ -335,6 +336,6 @@ export default {
             console.log(error)
             toast.error('Cannot load Categories!')
         })
-    }
+    },
 }
 </script>

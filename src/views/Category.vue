@@ -18,7 +18,7 @@
                     </tr>
                     <tr class="border-0" v-for="(category, index) in categories" :key="(category, index)">
                         <td><span v-text="index+1"></span></td>
-                        <td><span v-text="category.name"></span></td>
+                        <td title="Click to edit category name"><span role="button" v-text="category.name" @click="edit(index)"></span></td>
                         <td><span v-text="category.product"></span></td>
                         <td>
                             <button class="btn btn-outline-danger" @click="remove(category.id)">Remove</button>
@@ -47,6 +47,37 @@ export default {
         Spinner,
     },
     methods: {
+        edit: function(index){
+            let self = this
+            this.$prompt("Please set new name: ", self.categories[index].name).then(name => {
+                const toast = useToast()
+                if(!name.trim()){
+                    toast.warning('Category name must be not empty.');
+                    return false
+                }
+                axios.post(this.$api+'/category/edit', {
+                    token: localStorage.getItem('token'),
+                    category_id: self.categories[index].id,
+                    category_name: name,
+                })
+                .then(function(response){
+                    if(response.data.status == 200){
+                        toast.info("Category renamed!")
+                    }else if(response.data.status == 403){
+                        toast.warning('Permission denied!')
+                    }else{
+                        toast.error('Error!')
+                    }
+                })
+                .catch(function(error){
+                    toast.error("Error!")
+                    console.log(error)
+                })
+                .finally(function(){
+                    self.load()
+                })
+            });
+        },
         load: function(){
             const toast = useToast()
             let self = this
