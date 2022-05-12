@@ -19,7 +19,7 @@
                         <th>State</th>
                         <th>Action</th>
                     </tr>
-                    <tr v-for="order, index in orders.filter(i => allOrders || (i.state == 1) || (i.state == 2) || (i.state == 3))" :key="(order, index)">
+                    <tr v-for="order, index in orders.filter(i => allOrders || i.payment_method)" :key="(order, index)">
                         <td v-text="index + 1"></td>
                         <td>
                             <div class="p-0"><b v-text="order.fullname"></b></div>
@@ -60,7 +60,7 @@ export default {
         return {
             loading: false,
             orders: false,
-            allOrders: localStorage.getItem('allOrders'),
+            allOrders: false,
         }
     },
     name: 'Order',
@@ -96,6 +96,11 @@ export default {
     },
     created(){
         this.load()
+        if(localStorage.getItem('allOrders') == 'true'){
+            this.allOrders = true
+        } else {
+            this.allOrders = false
+        }
     },
 }
 </script>
