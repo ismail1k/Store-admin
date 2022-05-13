@@ -1,5 +1,6 @@
 <template>
     <div class="d-flex justify-content-center">
+        <Spinner v-if="loading"></Spinner>
         <div class="col-12 col-md-10 col-lg-8 col-xl-5">
             <div class="form-group my-5">
                 <div class="d-flex justify-content-center">
@@ -11,8 +12,7 @@
                     <span>{{alert}}</span>
                 </div>
             </div>
-            <Spinner v-if="loading"></Spinner>
-            <div v-else>
+            <div>
                 <div class="form-group row align-items-center mb-3">
                     <div class="d-flex justify-content-start">
                         <label for="email">Email: </label>
