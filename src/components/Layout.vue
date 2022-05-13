@@ -2,10 +2,10 @@
     <div>
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <router-link class="navbar-brand" to="/">Welcome</router-link>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <a class="btn text-secondary btn-sm order-1 order-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></a>
             <ul class="navbar-nav ml-auto mr-md-0">
                 <li class="nav-item dropdown" @click="logout()">
-                    <a class="nav-link"><i class="fas fa-arrow-right-from-bracket fa-fw"></i></a>
+                    <a class="nav-link text-secondary" role="button"><i class="fas fa-power-off fa-fw"></i></a>
                 </li>
             </ul>
         </nav>
@@ -162,6 +162,9 @@ export default {
                 console.log(error)
             })
         },
+        toggleMenu: function(){
+            $("body").toggleClass("sb-sidenav-toggled")
+        },
     },
     async created(){
         await this.loadUser()
@@ -174,6 +177,10 @@ export default {
         $("#sidebarToggle").on("click", function(e) {
             e.preventDefault()
             $("body").toggleClass("sb-sidenav-toggled")
+        })
+        $("#layoutSidenav_nav").on("click", function(e) {
+            e.preventDefault()
+            $("body").removeClass("sb-sidenav-toggled")
         })
         
         $("a").each(function() {

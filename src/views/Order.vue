@@ -13,8 +13,8 @@
         <div class="card-body">
             <Spinner v-if="loading"></Spinner>
             <div v-if="!loading && orders.length">
-                <div class="form-check form-switch d-flex justify-content-end">
-                    <label class="form-check-label" style="margin-right:40px;" for="allOrders" >Show all Orders</label>
+                <div class="form-check form-switch d-flex justify-content-end" title="Show unpayed orders">
+                    <label class="form-check-label" style="margin-right:40px;" for="allOrders">Show all</label>
                     <input class="form-check-input" type="checkbox" v-model="allOrders" id="allOrders" role="switch">
                 </div>
                 <table class="table">
@@ -111,7 +111,7 @@ export default {
                         id: id,
                         fullname: order.fullname,
                         phone: order.phone,
-                        adress: order.adress,
+                        address: order.address,
                         payment_method: order.payment_method,
                         state: order.state==0?'reject':order.state==1?'pending':order.state==2?'processing':order.state==3?'complete':order.state==4?'refund':order.state,
                         note: order.note,

@@ -3,8 +3,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <a href="javascript:void(0)" @click="$router.back()" class="text-decoration-none text-primary">Return Back</a>
             <div class="d-flex justify-content-end">
-                <a href="javascript:void(0)" @click="print()" class="btn btn-outline-primary mx-2 px-4">Print</a>
-                <router-link to="/settings" class="btn btn-outline-primary">Settings</router-link>
+                <a href="javascript:void(0)" @click="print()" class="btn btn-outline-primary px-4">Print</a>
             </div>
         </div>
         <div class="card-body">
