@@ -1,7 +1,14 @@
 <template>
     <div>
         <div class="card-header d-flex justify-content-end">
-            <router-link to="/order/create" class="btn btn-outline-primary ml-2">Create Order</router-link>
+            <vue-excel-xlsx v-if="x" class="btn btn-outline-primary ml-2"
+                :data="x.data"
+                :columns="x.header"
+                :file-name="$moment(new Date()).format('Y-d-m H:mm:s')"
+                :file-type="'xlsx'"
+                :sheet-name="'sheetname'">
+                Export
+            </vue-excel-xlsx>
         </div>
         <div class="card-body">
             <Spinner v-if="loading"></Spinner>
@@ -61,6 +68,7 @@ export default {
             loading: false,
             orders: false,
             allOrders: false,
+            x: {},
         }
     },
     name: 'Order',
@@ -92,7 +100,66 @@ export default {
     watch: {
         allOrders(value){
             localStorage.setItem('allOrders', value)
-        }
+        },
+        orders(value){
+            let orders = []
+            let id = 0
+            value.forEach(order => {
+                order.cart.items.forEach(item => {
+                    id++
+                    orders.push({
+                        id: id,
+                        fullname: order.fullname,
+                        phone: order.phone,
+                        adress: order.adress,
+                        payment_method: order.payment_method,
+                        state: order.state==0?'reject':order.state==1?'pending':order.state==2?'processing':order.state==3?'complete':order.state==4?'refund':order.state,
+                        note: order.note,
+                        product: item.name,
+                        quantity: item.quantity,
+                    })
+                });
+            });
+            this.x.data = orders
+            this.x.header = [
+                {
+                    label: '#',
+                    field: 'id',
+                },
+                {
+                    label: 'Fullname',
+                    field: 'fullname',
+                },
+                {
+                    label: 'Phone',
+                    field: 'phone',
+                },
+                {
+                    label: 'Address',
+                    field: 'address',
+                },
+                {
+                    label: 'Payment Method',
+                    field: 'payment_method',
+                },
+                {
+                    label: 'State',
+                    field: 'state',
+                },
+                {
+                    label: 'Note',
+                    field: 'note',
+                },
+                {
+                    label: 'Product',
+                    field: 'product',
+                },
+                {
+                    label: 'Quantity',
+                    field: 'quantity',
+                },
+            ]
+        },
     },
     created(){
         this.load()

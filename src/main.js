@@ -6,16 +6,20 @@ import jQuery from 'jquery'
 import router from './router'
 import Toast, { POSITION } from "vue-toastification"
 import VueSimpleAlert from "vue3-simple-alert-next"
+import VueExcelXlsx from "vue-excel-xlsx"
+import moment from 'moment'
 import "vue-toastification/dist/index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 
 //Initialize
 const app = createApp(App)
+app.config.globalProperties.$moment = moment
 app.config.globalProperties.$hostname = process.env.VUE_APP_HOSTNAME
 app.config.globalProperties.$api = process.env.VUE_APP_API
 app.config.globalProperties.$base_url = process.env.VUE_APP_BASE_URL
 app.config.globalProperties.$store = process.env.VUE_APP_BASE_URL
+
 const store = new vuex.Store({
     state: {
         user: false,
@@ -52,4 +56,9 @@ const ToastOptions = {
     containerClassName: "px-2"
 }
 window.$ = jQuery;
-app.use(router).use(store).use(Toast, ToastOptions).use(VueSimpleAlert, { reverseButtons: true }).mount('#app')
+app.use(router)
+.use(store)
+.use(Toast, ToastOptions)
+.use(VueSimpleAlert, { reverseButtons: true })
+.use(VueExcelXlsx)
+.mount('#app')
