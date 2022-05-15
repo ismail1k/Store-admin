@@ -10,39 +10,39 @@
             <Spinner class="my-4" v-if="loading"></Spinner>
             <div>
                 <div v-if="!loading && mail">
-                    <div class="form-group d-md-flex">
-                        <div class="col-md-4"><label for="">Firstname: </label></div>
-                        <div class="col-12 col-md-8">
+                    <div class="form-group d-flex">
+                        <div class="col-4"><label for="">Firstname: </label></div>
+                        <div class="col-8">
                             <span v-text="mail.firstname"></span>
                         </div>
                     </div>
-                    <div class="form-group d-md-flex">
-                        <div class="col-md-4"><label for="">Lastname: </label></div>
-                        <div class="col-12 col-md-8">
+                    <div class="form-group d-flex">
+                        <div class="col-4"><label for="">Lastname: </label></div>
+                        <div class="col-8">
                             <span v-text="mail.lastname"></span>
                         </div>
                     </div>
-                    <div class="form-group d-md-flex">
-                        <div class="col-md-4"><label for="">Date: </label></div>
-                        <div class="col-12 col-md-8">
+                    <div class="form-group d-flex">
+                        <div class="col-4"><label for="">Date: </label></div>
+                        <div class="col-8">
                             <span v-text="mail.created_at"></span>
                         </div>
                     </div>
-                    <div class="form-group d-md-flex">
-                        <div class="col-md-4"><label for="">From: </label></div>
-                        <div class="col-12 col-md-8">
+                    <div class="form-group d-flex">
+                        <div class="col-4"><label for="">From: </label></div>
+                        <div class="col-8">
                             <span v-text="mail.email"></span>
                         </div>
                     </div>
-                    <div class="form-group d-md-flex">
-                        <div class="col-md-4"><label for="">Subject: </label></div>
-                        <div class="col-12 col-md-8">
+                    <div class="form-group d-flex">
+                        <div class="col-4"><label for="">Subject: </label></div>
+                        <div class="col-8">
                             <span v-text="mail.subject"></span>
                         </div>
                     </div>
-                    <div class="form-group d-md-flex">
-                        <div class="col-md-4"><label for="">Message: </label></div>
-                        <div class="col-12 col-md-8">
+                    <div class="form-group d-flex">
+                        <div class="col-4"><label for="">Message: </label></div>
+                        <div class="col-8">
                             <span v-text="mail.message"></span>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 <template>
-    <div class="d-flex justify-content-center">
         <Spinner v-if="loading"></Spinner>
+    <div class="d-flex justify-content-center">
         <div class="col-12 col-md-10 col-lg-8 col-xl-5">
             <div class="form-group my-5">
                 <div class="d-flex justify-content-center">
@@ -94,6 +94,7 @@ export default {
                 }
             })
             .catch(function(error){
+                self.alert = 'Internal error, You cannot login now.'
                 console.log(error)
             })
             .finally(function(){
