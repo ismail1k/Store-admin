@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card-header">
-            <div class="d-flex justify-content-end">
+            <div class="d-flex align-items-center justify-content-end">
                 <router-link to="/settings" class="btn btn-outline-primary">Settings</router-link>
             </div>
         </div>

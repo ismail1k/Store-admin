@@ -18,7 +18,7 @@ export default {
     mounted(){
         $(".progress-bar").animate({
                 width: "80%",
-        }, 1)
+        }, 50)
     }
 }
 </script>
