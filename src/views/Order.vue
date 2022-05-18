@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card-header d-flex justify-content-end">
-            <vue-excel-xlsx v-if="x" class="btn btn-outline-primary ml-2"
+            <vue-excel-xlsx v-if="x && orders.length" class="btn btn-outline-primary ml-2"
                 :data="x.data"
                 :columns="x.header"
                 :file-name="$moment(new Date()).format('Y-d-m H:mm:s')"
@@ -9,6 +9,7 @@
                 :sheet-name="'sheetname'">
                 Export
             </vue-excel-xlsx>
+            <router-link to="/product" class="btn btn-outline-primary ml-2">Product</router-link>
         </div>
         <div class="card-body">
             <Spinner v-if="loading"></Spinner>
@@ -26,7 +27,7 @@
                         <th>State</th>
                         <th>Action</th>
                     </tr>
-                    <tr v-for="order, index in orders.filter(i => allOrders || i.payment_method)" :key="(order, index)">
+                    <tr v-for="order, index in orders.filter(i => allOrders || i.payed)" :key="(order, index)">
                         <td v-text="index + 1"></td>
                         <td>
                             <div class="p-0"><b v-text="order.fullname"></b></div>
@@ -34,9 +35,7 @@
                         </td>
                         <td v-text="order.address"></td>
                         <td>
-                            <span class="badge bg-primary" v-if="order.payment_method == 'paypal'">PayPal</span>
-                            <span class="badge bg-primary" v-if="order.payment_method == 'cod'">Cash On Delivery</span>
-                            <span class="badge bg-primary" v-if="order.payment_method == 'cc'">Credit Card</span>
+                            <span class="badge bg-primary" v-text="order.payment.provider"></span>
                         </td>
                         <td>
                             <span v-if="order.state == 0" class="badge bg-danger">Reject</span>
@@ -105,14 +104,14 @@ export default {
             let orders = []
             let id = 0
             value.forEach(order => {
-                order.cart.items.forEach(item => {
+                order.items.forEach(item => {
                     id++
                     orders.push({
                         id: id,
                         fullname: order.fullname,
                         phone: order.phone,
                         address: order.address,
-                        payment_method: order.payment_method,
+                        payment_method: order.payment.provider,
                         state: order.state==0?'reject':order.state==1?'pending':order.state==2?'processing':order.state==3?'complete':order.state==4?'refund':order.state,
                         note: order.note,
                         product: item.name,

@@ -65,7 +65,7 @@
                     <div class="col-md-8 d-flex justify-content-between">
                         <select class="form-select" v-model="product.inventory.type">
                             <option value="1" selected>Physical</option>
-                            <option value="2">Digital</option>
+                            <option value="2" disabled>Digital</option>
                         </select>
                         <input type="text" v-model="product.inventory.name" @click="!product.inventory.name&&product.name ?product.inventory.name = product.name+'\'s Inventory':'' " class="col-9 form-control ml-2" placeholder="Inventory name"/>
                     </div>

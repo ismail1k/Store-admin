@@ -30,9 +30,7 @@
                         <tr>
                             <td>Payment Method</td>
                             <td>
-                                <span class="badge bg-primary" v-if="order.payment_method == 'paypal'">PayPal</span>
-                                <span class="badge bg-primary" v-if="order.payment_method == 'cod'">Cash On Delivery</span>
-                                <span class="badge bg-primary" v-if="order.payment_method == 'cc'">Credit Card</span>
+                                <span class="badge bg-primary" v-text="order.payment.provider"></span>
                             </td>
                         </tr>
                         <tr>
@@ -56,12 +54,12 @@
                             <th width="120px">Quantity</th>
                             <th width="200px">Price</th>
                         </tr>
-                        <tr v-for="item, index in order.cart.items" :key="(item, index)">
+                        <tr v-for="item, index in order.items" :key="(item, index)">
                             <td v-text="index+1"></td>
                             <td v-text="item.name"></td>
                             <td v-text="item.quantity"></td>
                             <td>
-                                <span class="px-0" v-text="item.unit_price"></span>&nbsp;
+                                <span class="px-0" v-text="item.price"></span>&nbsp;
                                 <span class="px-0" v-text="$store.state.currency+'/Unit'"></span>
                             </td>
                         </tr>

@@ -86,7 +86,7 @@
                         </select>
                         <select v-if="product.inventory.id == 0" class="col-2 form-select" v-model="product.inventory.type">
                             <option value="1" selected>Physical</option>
-                            <option value="2">Digital</option>
+                            <option value="2" disabled>Digital</option>
                         </select>
                         <input v-if="product.inventory.id == 0" type="text" v-model="product.inventory.name" class="col-6 form-control ml-2" placeholder="Inventory name"/>
                     </div>

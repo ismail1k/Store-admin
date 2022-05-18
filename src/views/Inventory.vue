@@ -5,7 +5,7 @@
                 <input type="text" class="form-control" v-model="inventory_name" placeholder="New inventory">
                 <select class="form-control mx-2 col-2" v-model="inventory_type">
                     <option value="1">Physical</option>
-                    <option value="2">Digital</option>
+                    <option value="2" disabled>Digital</option>
                 </select>
                 <button class="btn btn-outline-primary px-4" @click="make()">Create</button>
             </div>
