@@ -27,7 +27,7 @@
                         <th>State</th>
                         <th>Action</th>
                     </tr>
-                    <tr v-for="order, index in orders.filter(i => allOrders || i.payed)" :key="(order, index)">
+                    <tr v-for="order, index in orders.filter(i => allOrders || i.payment)" :key="(order, index)">
                         <td v-text="index + 1"></td>
                         <td>
                             <div class="p-0"><b v-text="order.fullname"></b></div>
@@ -109,6 +109,7 @@ export default {
                     orders.push({
                         id: id,
                         fullname: order.fullname,
+                        email: order.email,
                         phone: order.phone,
                         address: order.address,
                         payment_method: order.payment.provider,
@@ -128,6 +129,10 @@ export default {
                 {
                     label: 'Fullname',
                     field: 'fullname',
+                },
+                {
+                    label: 'Email',
+                    field: 'email',
                 },
                 {
                     label: 'Phone',

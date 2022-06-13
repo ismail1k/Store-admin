@@ -24,18 +24,22 @@
                             <td v-text="order.address"></td>
                         </tr>
                         <tr>
+                            <td>Email</td>
+                            <td v-text="order.email"></td>
+                        </tr>
+                        <tr>
                             <td>Phone</td>
                             <td v-text="order.phone"></td>
+                        </tr>
+                        <tr>
+                            <td>Note from buyer</td>
+                            <td v-text="order.note"></td>
                         </tr>
                         <tr>
                             <td>Payment Method</td>
                             <td>
                                 <span class="badge bg-primary" v-text="order.payment.provider"></span>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>Note from buyer</td>
-                            <td v-text="order.note"></td>
                         </tr>
                         <tr>
                             <td>State</td>
